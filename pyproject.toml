@@ -1,0 +1,27 @@
+[project]
+name = "eci-slm"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "groq>=1.1.1",
+    "numpy>=2.4.3",
+    "openai>=2.29.0",
+    "pandas>=3.0.1",
+    "python-dotenv>=1.2.2",
+    "sentencepiece>=0.2.1",
+    "tensorflow[and-cuda]>=2.21.0",
+    "tiktoken>=0.12.0",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.2.0",
+    "pdf2image>=1.17.0",
+    "pdfminer-six>=20260107",
+    "pymupdf>=1.27.2.2",
+    "pytesseract>=0.3.13",
+    "ruff>=0.15.7",
+    "ty>=0.0.24",
+]

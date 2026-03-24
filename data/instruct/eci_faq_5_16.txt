@@ -1,0 +1,232 @@
+User: What is the Model Code of Conduct?
+Assistant: The Model Code of Conduct for guidance of political parties and candidates is a set of norms which has been evolved with the consensus of political parties who have consented to abide by the principles embodied in the said code and also binds them to respect and observe it in its letter and spirit.
+<END>
+User: What is the role of Election Commission in the matter?
+Assistant: The Election Commission ensures its observance by political party(ies) in power, including ruling parties at the Centre and in the States and contesting candidates in the discharge of its constitutional duties for conducting the free, fair and peaceful elections to the Parliament and the State Legislatures under Article 324 of the Constitution of India. It is also ensured that official machinery for the electoral purposes is not misused. Further, it is also ensured that electoral offences, malpractices and corrupt practices such as impersonation, bribing and inducement of voters, threat and intimidation to the voters are prevented by all means. In case of violation, appropriate measures are taken.
+<END>
+User: From which date the Model Code of Conduct is enforced and operational upto which date?
+Assistant: The Model Code of Conduct is enforced from the date of announcement of election schedule by the Election Commission and is operational till the process of elections are completed.
+<END>
+User: What is applicability of code during general elections and bye-elections?
+Assistant: During general elections to House of People (Lok Sabha), the code is applicable throughout the country. During general elections to the Legislative Assembly (Vidhan Sabha), the code is applicable in the entire State. During bye-elections, in case the constituency is comprised in State Capital/Metropolitan Cities/Municipal Corporations, then the code would be applicable in the area of concerned Constituency only. In all other cases the MCC would be enforced in the entire district(s) covering the Constituency going for bye-election(s).
+<END>
+User: What are the salient features of the Model Code of Conduct?
+Assistant: The salient features of the Model Code of Conduct lay down how political parties, contesting candidates and party(s) in power should conduct themselves during the process of elections i.e. on their general conduct during electioneering, holding meetings and processions, poll day activities and functioning of the party in power etc. ON OFFICIAL MACHINERY
+<END>
+User: Whether a Minister can combine his official visit with electioneering work?
+Assistant: No The Ministers shall not combine their official visit with electioneering work and shall not also make use of official machinery or personnel during the electioneering work however, the Commission has exempted the Prime Minister from the operation of the model code of conduct provision pertaining to the combining of official visit with electioneering visit.
+<END>
+User: Whether Govt. transport can be used for electioneering work?
+Assistant: No transport including official air-crafts, vehicles etc. shall be used for furtherance of the interest of any party or a candidate.
+<END>
+User: Whether Govt. can make transfers and postings of officials who are related to election work?
+Assistant: There shall be a total ban on the transfer and posting of all officers/officials directly or indirectly connected with the conduct of the election. If any transfer or posting of an officer is considered necessary, prior approval of the Commission shall be obtained.
+<END>
+User: Suppose an officer related to election work has been transferred by the Govt. before enforcement of model code of conduct and has not taken over charge at new place. Can such officer take over charge of office at new place after announcement of the code?
+Assistant: No. Status-quo-ante shall be maintained.
+<END>
+User: Whether a Minister of Union or State can summon any election related officer of the constituency or the State for any official discussion during the period of elections?
+Assistant: No Minister, whether of Union or State, can summon any election related officer of the constituency or the State for any official discussions anywhere. Only exception will be when a Minister, in his capacity as in charge of the department concerned, or a Chief Minister undertakes an official visit to a constituency, in connection with failure of law and order or a natural calamity or any such emergency which requires personal presence of such Ministers/Chief Ministers for the specific purpose of supervising review/salvage/relief and such like purpose. If Union Minister is traveling out of Delhi on purely official business, which cannot be avoided in public interest, then a letter certifying to this effect should be sent from the concerned Secretary of the Ministry/Department to the Chief Secretary of the concerned State, with a copy to the Election Commission.
+<END>
+User: Can an official meet the minister on his private visit to the Constituency where elections are being held?
+Assistant: No. Any official who meets the Minister on his private visit to the constituency shall be guilty of misconduct under the relevant service rules; and if he happens to be an official mentioned in Section 129 (1) of the Representation of People Act, 1951, he shall also be additionally considered to have violated the statutory provisions of that Section and liable to penal action provided thereunder.
+<END>
+User: Whether Ministers are entitled for official vehicle during the election?
+Assistant: Ministers are entitled to use their official vehicles only for commuting from their official residence to their office for official work provided that such commuting is not combined with any electioneering or any political activity.
+<END>
+User: Whether Ministers or any other political functionaries can use pilot car with beacon lights affixed with siren?
+Assistant: Minister or any other political functionary is not allowed during election period, to use pilot car or car with beacon lights of any colour or car affixed with sirens of any kind whether on private or official visit, even if the State administration has granted him a security cover requiring presence of armed guards to accompany him on such visit. This prohibition is applicable whether the vehicle is government owned or private owned.
+<END>
+User: Suppose a vehicle has been provided to Minister by the State and the Minister is given an allowance for maintenance of such vehicle. Can it be used by the Minister for election purposes?
+Assistant: Where a vehicle is provided by the State or the Minister is given an allowance for maintenance of the vehicle, he cannot use such vehicle for election.
+<END>
+User: Whether there is any restriction or visits of members of National Commission for Schedule Castes or any other similar National/State Commissions?
+Assistant: It is advised that all official visits of Members of such Commissions shall be deferred, unless any such visit becomes unavoidable in an emergent situation, till the completion of election exercise to avoid any misunderstanding that may arise in any quarters.
+<END>
+User: Whether a Chief Minister/Minister/Speaker can attend a “State Day” function of a State?
+Assistant: There is no objection provided that he does not make any political speech on the occasion and the function is to be conducted only by Govt. officials. No advertisement depicting the photograph of Chief Minister/Minister/Speaker shall be released.
+<END>
+User: Whether Governor/Chief Minister/Ministers can participate and address the Convocation function of University or Institute?
+Assistant: Governor may participate and address the Convocation. Chief Minister or Ministers may be advised not to participate and address the Convocation.
+<END>
+User: Whether “Iftar Party” or any other similar party can be hosted at the residence of political functionaries, the expenses of which will be borne by State exchequer?
+Assistant: No. However any individual is free by to host any such party in his personal capacity and at his personal expense. ON WELFARE SCHEMES, GOVERNMENT WORKS ETC.
+<END>
+User: Is there any restriction on issue of advertisement at the cost of public exchequer regarding achievements with a view to furthering the prospects of the party in power?
+Assistant: Yes. The advertisement regarding achievements of the party at the cost of public exchequer in the print and electronic media and the misuse of official mass media during the period of election is prohibited.
+<END>
+User: Whether hoardings/advertisements etc. depicting the achievements of the party(s) in power at Centre/State Governments at the cost of public exchequer can be continued?
+Assistant: No. All such hoardings, advertisements etc. on display shall be removed forthwith by the concerned authorities. Further, no advertisements should be issued in the newspapers and other media including electronic media at the cost of public exchequer.
+<END>
+User: Whether a Minister or any other authority can sanction grants/ payments out of discretionary funds?
+Assistant: No. Ministers and other authorities shall not sanction grants/payments out of discretionary funds from the time elections are announced.
+<END>
+User: Suppose work order has been issued in respect of a scheme or a programme. Can it be started after announcement of election programme?
+Assistant: Work shall not be started in respect of which work order has been issued before announcement of election but the work has actually not started in the field. If a work has actually started in the field that can be continued.
+<END>
+User: Whether fresh release of funds under MPs/MLAs/MLCs Local Area Development Fund of any scheme can be made?
+Assistant: No. Fresh release of funds under MPs/MLAs/MLCs Local Area Development Fund of any scheme shall not be made in any area where election is in progress, till the completion of the election process.
+<END>
+User: There are various rural development programmes/ schemes of Central government like Indira Awas Yojana, Sampoorna Grameen Rozgar Yojana, Swaranjayanti Gram Swarozgar Yojana, National Food for Work programme, National Rural Employment Guarantee Act. Are there any guidelines for implementation of these schemes/programmes? (Part 1)
+Assistant: Yes. Following guidelines shall be followed in respect of each scheme/programme as enumerated below:- Indira Awas Yojana (IAY) Beneficiaries, who have been sanctioned housing scheme under IAY and have started work, will be assisted as per norms. No new constructions will be taken up or fresh beneficiaries sanctioned assistance till the elections are over. Sampoorna Grameen Rozgar Yojana (SGRY) Continuing works in progress may be continued and funds earmarked for such works can be released. In case of any Panchayat where all ongoing works have been completed and there is a requirement for taking up new wage employment works and where funds released directly to the Panchayats from the Ministry of Rural Development are available, new works can be started from approved annual action plan for the current year with the prior consent of the District Election Officer. From other funds, no new works shall be started. Swaranjayanti Gram Swarozgar Yojana (SGSY) Only those help groups which have received part of their subsidy/grant will be provided the balance installments. No fresh individual beneficiaries or SHGs will be given financial assistance till the elections are over. National Food for Work Programme(NFWP) There is no objection for continuance of old works and sanction of new works in those districts where no elections have been announced. In those districts where elections have been announced and are in progress, only those works may be undertaken that have already started physically on ground, provided outstanding advance given for implementation of such works at a given time shall not exceed the amount equivalent to work for 45 days. National Employment Rural Guarantee Act (NERGA) The Ministry of Rural Development shall not increase the number of districts in which it is being implemented after announcement of elections.
+<END>
+User: There are various rural development programmes/ schemes of Central government like Indira Awas Yojana, Sampoorna Grameen Rozgar Yojana, Swaranjayanti Gram Swarozgar Yojana, National Food for Work programme, National Rural Employment Guarantee Act. Are there any guidelines for implementation of these schemes/programmes? (Part 2)
+Assistant: The job card holders will be provided employment in the ongoing work, if they demand work, after announcement of elections. In case no employment can be provided in ongoing works, the competent authority may start new work(s) from the shelf of projects that has been approved and inform the fact to concerned District Election Officer (DEO). No new work shall be started by the competent authority till such time employment can be given in ongoing works. In case no shelf of project is available or all works available on shelf have been exhausted, then the concerned competent authority shall make a reference to the Commission for approval through the concerned DEO. The competent authority shall also furnish a certificate to DEO to the effect that the new work has been sanctioned as no employment can be given to the job card holder in the ongoing work.
+<END>
+User: Whether a Minister or any other authority can announce any financial grants in any form or promises thereof or lay foundation stones etc. of projects or schemes of any kinds etc.?
+Assistant: No. Ministers and other authorities shall not announce any financial grants in any form or promises thereof; or (except civil servants) lay foundation stones etc. of projects or schemes of any kind; or make any promise of construction of roads, provision of drinking water facilities etc. or make any ad-hoc appointments in Government, Public Undertakings etc. In such case, senior Govt. officer may lay foundation stone etc. without involving any political functionary.
+<END>
+User: A budget provision has been made for a particular scheme or the scheme has been sanctioned earlier. Can such scheme be announced or inaugurated?
+Assistant: No. Inauguration/announcement of such scheme is prohibited during election period.
+<END>
+User: Whether ongoing beneficiary scheme can be continued?
+Assistant: The following types of existing works can be continued by the government agencies without reference to the Election Commission after the Model Code of Conduct comes into force: Work-Projects that have actually started on the ground after obtaining all necessary sanctions; Beneficiary-projects where specific beneficiaries by name have been identified before coming of the Model Code of Conduct into force; Registered beneficiaries of MGNREGA may be covered under existing projects. New projects under MGNREGA that may be mandated under the provisions of the Act may be taken up only if it is for the already registered beneficiaries and the project is already listed in the approved and sanctioned shelf of projects for which funds are also already earmarked. The following type of new works (whether beneficiary or work oriented) that fulfill all the following conditions before Model Code of Conduct comes into effect, can be taken up under intimation to the Commission. Full funding has been tied up. Administrative, technical and financial sanctions have been obtained Tender has been floated, evaluated and awarded. There is contractual obligation to start and end the work within a given time frame and failing which there is an obligation to impose penalty on the contractor. In case of any of the above conditions not being met in such cases prior approval of the Commission shall be sought and obtained.
+<END>
+User: Is there any bar to release of payments for completed work?
+Assistant: There shall be no bar to the release of payments for completed work subject to the full satisfaction of the concerned officials.
+<END>
+User: How the Govt. may meet the emergency situation or unforeseen calamities, when there are restrictions for announcing welfare measures?
+Assistant: For tackling emergencies or unforeseen calamities like providing relief to people suffering from drought, floods, pestilences, other natural calamities or welfare measures for the aged, infirm etc., Govt. may do so after obtaining prior approval of the Commission and all ostentatious functions shall be strictly avoided and no impression shall be given or allowed to be created that such welfare measures or relief and rehabilitation works are being undertaken by the Government in office with any ulterior motive.
+<END>
+User: Whether financial institutions funded, partially or wholly by the Governments can write off loans advanced to any individual, company, firm, etc.?
+Assistant: No. The financial institutions funded, partially or wholly by the Governments shall not take recourse to writing off loans advanced to any individual, company, firm, etc. Also, financial limits of such institutions, while granting or extending loans, should not be enhanced by issuing of loans indiscriminately to beneficiaries.
+<END>
+User: Whether tenders, auctions etc. relating to matters such as liquor vends, Tendu leaves and other such cases can be processed?
+Assistant: No. Processing of such cases should be deferred till the completion of election process in the concerned areas and the Govt. may make interim arrangements where unavoidably necessary.
+<END>
+User: Whether meeting of Municipal Corporation, Nagar Panchayat, Town Area Committee, etc. can be convened to review the revenue collection and preparing draft annual budget etc.?
+Assistant: Yes. Provided that at such meetings only the matters of routine nature relating to day-to-day administration may be taken up and not the matters relating to its policies and programmes.
+<END>
+User: Whether political functionaries can participate in the celebration of “Sadbhavna Diwas” which is celebrated throughout the country?
+Assistant: The Central Ministers / Chief Minister / Ministers in the States and other political functionaries can participate in the celebration of “Sadbhavna Diwas” subject to condition that the “theme” of their speeches should be confined only to the promotion of harmony among the people’ and no political speech should be made. Messages, if any, issued in the name of Minister should be confined to the theme of national integration only and should carry no photograph of the concerned Minister.
+<END>
+User: Whether State-level functions can be held for observance of Martyrdom of Martyrs which may be presided/attended to by Chief Minister / Minister?
+Assistant: Yes. Provided that the speeches of the Chief Minister and other Ministers should restrict to the Martyrdom of the Martyrs and praising them. No political speech or speech enumerating or referring to the achievements of the Government or party in power should be made.
+<END>
+User: Whether Kavi Sammelan, Mushiaras or other cultural functions can be organized in connection with the Independence Day/Republic Day celebration and whether political functionaries can attend the same?
+Assistant: Yes. The Central Ministers / Chief Minister / Ministers in the States and other political functionaries can attend the programme. However, it will be ensured that no political speeches highlighting the achievements of the party in power are made on the occasions.
+<END>
+User: Whether political advertisements can be printed on back side of the bus-ticket of Govt. owned buses?
+Assistant: No
+<END>
+User: Whether minimum support price of wheat and other agricultural products can be determined?
+Assistant: A reference in the matter shall be made to the Election Commission.
+<END>
+User: Whether State Govt. can seek clarification/ clearance/approval in respect of any proposal directly from the Election Commission?
+Assistant: No. Any proposal from State Govt. for seeking clarification/clearance/approval from the Election Commission should only be routed through Chief Electoral Officer, who will make his recommendation or otherwise in the matter. ELECTION CAMPAIGN
+<END>
+User: What are the main guidelines for political parties/candidates while making election campaign?
+Assistant: During the election campaign, no party or candidate shall indulge in any activity which may aggravate existing differences or create mutual hatred or cause tension between different castes and communities, religious or linguistic. Further, criticism of other political parties, when made, shall be confined to their policies and programme, past record and work. Parties and candidates shall refrain from criticism of all aspects of private life, not connected with the public activities of the leaders or workers of other parties. Criticism of other parties or their workers based on unverified allegations or distortion shall be avoided.
+<END>
+User: Are there any restrictions in using religious places for election propaganda?
+Assistant: Yes. Religious places like Temple, Mosque, Church, Gurudwara or other places of worship shall not be used as forum for election propaganda. Further, there shall be no appeal to caste or communal feelings for securing votes.
+<END>
+User: Can a candidate go to the office of Returning Officer for filing a nomination with a procession?
+Assistant: No The maximum number of vehicles that will be allowed to come within the periphery of 100 mtrs. of Returning Officer's office has been restricted to 3 and maximum number of persons that will be allowed to enter the office of Returning Officer has been limited to 5 (including the candidate).
+<END>
+User: How many persons are allowed at the time of scrutiny of nominations by the Returning Officer?
+Assistant: The candidate, his election agent, one Proposer and one other person (who can be an advocate) duly authorized in writing by the candidate, but no other person, may attend at the time fixed for scrutiny of nominations by Returning Officer. (Refer: Sec. 36 (1) of Representation of People Act, 1951)
+<END>
+User: Are there any guidelines regarding use of vehicles by ministers/political functionaries/candidates, who have been provided security cover by the State?
+Assistant: Yes. In respect of persons covered by security, the use of State owned one bullet proof vehicle for the particular person (PP) will be permitted in all cases where the security agencies, including the intelligence authorities, have prescribed such use. The use of multiple cars in the name of stand-by should not be permitted unless so specifically prescribed by security authorities. The cost of propulsion of such bullet proof vehicles where such use of bullet proof vehicles is specified will be borne by the particular person. The number of vehicles to accompany the carcade including pilots, escorts etc. will be strictly in accordance with the instructions laid down by the security authorities and shall not exceed them under any circumstances. The cost of propulsion of all such vehicles, whether owned by Government or hired vehicles, will be met by the State Government. The restrictions do not apply to the Prime Minister whose security requirements are governed by the Government’s Blue Book.
+<END>
+User: Whether there is any restriction for plying of vehicles for electioneering purposes?
+Assistant: Candidate can ply any number of vehicles (all mechanized/motorized vehicles including two- wheelers) for the purpose of election campaign but he has to seek prior approval of the Returning Officer for plying such vehicles and must display permit issued by Returning Officer in original (not photocopy) prominently on the windscreen of the Vehicle. The permit must bear the number of the vehicle and name of the candidate in whose favour it is issued.
+<END>
+User: Whether a vehicle for which permission has been taken for election campaign in the name of a candidate, can be used for election campaign by another candidate?
+Assistant: No. Use of such vehicle for election campaign by another candidate shall invite action under section 171H of Indian Penal Code.
+<END>
+User: Can a vehicle be used for electioneering purposes without getting permit from the District Election Officer/Returning Officer?
+Assistant: No. Such vehicle shall be deemed to be unauthorized for campaigning by the candidate and may attract penal provisions of Chapter IX A of the Indian Penal Code and shall therefore be immediately out of the campaigning exercise and shall not be used for further campaign.
+<END>
+User: Whether there is any restriction on use of educational institutions including their grounds (whether Govt. aided, Private or Govt.) for political campaigns and rallies?
+Assistant: The Commission has allowed the use of school and college grounds (except in the States of Punjab and Haryana where there is express prohibition from Punjab and Haryana High Court) for political usage provided that: School and college academic calendar is not disturbed under any circumstances. The school/college management has no objection for this purpose and prior permission for such campaigning is obtained from the school/college Management as well as Sub Divisional Officer. Such permission is granted on first-come-first served basis and no political party is allowed to monopolize the use of those grounds. There is no order/direction of any court prohibiting the use of any such premises/ground. Any violation in the allotment of school/college grounds for political meetings will be viewed seriously by the Commission. The accountability in this regard lies with the Sub Divisional Officer, and The political parties and candidates and campaigners shall take care to ensure that the above norms are not violated. If such grounds are utilized for campaigning purpose it should be returned to the authority concerned, without any damage or with the requisite compensation for the damage caused, if any. The political party/parties restoring back the campaign ground to the concerned school/college authority should be responsible for the payment of such compensation, if any.
+<END>
+User: Is external fitting/modification allowed in the vehicles used for campaigning?
+Assistant: External modification of vehicles including fitting of loudspeaker thereon, would be subject to the provisions of the Motor Vehicles Act/Rules as well as other Local Act/Rules. Vehicles with modifications and special campaign vehicles like Video Rath etc. can be used only after obtaining the requisite permission from the competent authorities under the Motor Vehicles Act.
+<END>
+User: Is there any restriction or use of rest houses, dak bungalows or other Govt. accommodation for campaign office or for holding any public meeting for the purpose of election propaganda?
+Assistant: Yes. Rest houses, dak bungalows or other Govt. accommodation shall not be monopolized by the party in power or its candidates and such accommodation shall be allowed to use by other parties and candidates but no party or candidate shall be allowed to use as campaign office. Further, it shall be ensured that – no functionary can use the Circuit House, Dak bungalow to set up campaign office as the Circuit Houses/Dak bungalows are only for temporary stay (boarding and lodging) during transit of such functionaries, even casual meeting by Members of political parties inside the premises of the Government owned guesthouse etc. are not permitted and any violation of this shall be deemed to be a violation of the Model Code of Conduct, only the vehicle carrying the person allotted accommodation in the guest house and not more than two other vehicles, if used by the person, will be permitted inside the compound of the Guest House, rooms should not be made available for more than 48 hours to any single individual, and 48 hours before the close of poll in any particular area, there will be freeze on such allocations till completion of poll or re-poll.
+<END>
+User: Are there any conditions for getting Govt aircraft/helicopters (including Public Sector Undertakings) by political parties/candidates?
+Assistant: Yes. While allowing the chartering of Govt. aircrafts/helicopters to political parties/candidates or private companies etc., the following conditions should be followed:- There should be no discrimination between the ruling party on the one hand and the other parties and contesting candidates on the other. The payment will be made by the political parties or the contesting candidates and proper record maintained. The rates and terms and conditions should be uniform for all. The actual allotment should be made on the first-come first-served basis. For this purpose, the date and time of receipt of the application should be noted down by the authorized receiving authority. In the rare case when both the date and time of two or more applicants is the same, the allotment will be decided by draw of lots. No individual, firm, party or candidate will be allowed to charter the aircraft/helicopter for more than three days at a time.
+<END>
+User: Is there any restriction on displaying poster, placard, banner, flag etc. of the party concerned or the candidate on a public property?
+Assistant: Candidate may display poster, placard, banner, flag etc. of the party concerned or the candidate on a public property subject to provisions of local law and prohibitory orders in force. For details, refer Commission’s instructions No.3/7/2008/JS-II, dated 7.10.2008 and No. 437/6/Campaign/ECI/INST/FUNCT/MCC-2016 dated 04.01.2017.
+<END>
+User: If local law/bye-laws permit wall writings and pasting of posters, putting up hoardings, banners etc. on private premises/properties, is it necessary to obtain prior written permission from the owner of the premises/properties?
+Assistant: Yes. Candidate is required to obtain prior written permission from the owner of the properties/premises and photocopy(ies) of such permission should be submitted within 3 days to the Returning Officer or an officer designated by him for the purpose.
+<END>
+User: Is there any restriction on displaying/carrying poster/ placard/ banner/flag of the party concerned or of the candidate on the vehicle during the procession?
+Assistant: The maximum permissible number and size of flags/banners by a party or candidate on a vehicle during procession is as follows- Two wheelers– one flag of maximum size 1X1/2 ft. No banners are allowed. One or two stickers of appropriate size are allowed. Three wheelers, four wheelers, e-Rickshaws– No banners are allowed. Only one flag of maximum size 3X2 ft. One or two stickers of appropriate size are allowed. If a political party has a pre-poll alliance/seat sharing arrangement with another party, then the vehicle of a candidate/political party may display one flag each of such parties.
+<END>
+User: Whether there is any ban on use of plastic sheets for making use of posters/banners during the election campaign?
+Assistant: The political parties and candidates should try to avoid the use of plastic/polythene for preparation of posters, banners etc. in the interest of environmental protection.
+<END>
+User: Is there any restriction on the printing of pamphlets, posters etc.?
+Assistant: Yes. Candidate shall not print or publish, or cause to be printed or published any election pamphlet or poster which does not bear on its face names and addresses of the printer and the publisher thereof. (Refer : Section 127A of Representation of 1951)
+<END>
+User: Is wearing of special accessories like cap, mask, scarf etc. of a candidate permitted during the campaigning?
+Assistant: Yes, provided they are accounted for in the election expenses of the candidate concerned. However, supply and distribution of main apparels like saree, shirt, etc. by party/candidate is not permitted as it may amount to bribery of voters.
+<END>
+User: Whether there is restriction to display to the public any election matter by means of cinematograph, television or other similar apparatus?
+Assistant: Yes. Candidate can not display to the public any election matter by means of cinematograph, television or other similar apparatus during the period of 48 hours ending with the hour fixed for the conclusion of poll. (Refer: Sec. 126 of Representation of People Act, 1951)
+<END>
+User: Whether distribution of printed “Stepney Covers” or other similar material containing symbol of party/candidate or without depicting it, is a violation?
+Assistant: Yes. In case, it is established that such material has been distributed, a complaint may be filed before the area Magistrate by District Administration against the distribution of the said material under section 171 B of the IPC.
+<END>
+User: Are there conditions/guidelines for setting up and operating of Temporary Offices by Party or candidate?
+Assistant: Yes. Such offices can not be opened by way of any encroachment either on public or private property/ in any religious places or campus of such religious places/ contiguous to any educational institution / hospital / within 200 meters of an existing polling station. Further, such offices can display only one party flag and banner with party symbol/photographs and the size of the banner used in such offices should not exceed ‘4 feet X 8 feet’ subject to the further condition that if the local laws prescribe a lower size for banner / hoarding etc., then the lower size prescribed by local law shall prevail.
+<END>
+User: Is there any restriction on the presence of political functionaries in a constituency after campaign period is over?
+Assistant: Yes. After the closure of campaign period (starting from 48 Hrs. before closure of poll), political functionaries etc. who have come from outside the constituency and who are not voters of the constituency should not continue to remain present in the constituency. Such functionaries should leave the constituency immediately after campaign period is over. This will not apply in the case of candidate or his election agent even if they are not voters in the constituency.
+<END>
+User: Whether there is any restriction for holding public meeting or taking out processions?
+Assistant: Yes. Prior written permission should be obtained from the concerned police authorities for holding of a meeting at any public or private place and for taking out processions.
+<END>
+User: Whether loudspeakers can be used for public meetings or for processions or for general propaganda without obtaining permission from Police authorities?
+Assistant: No. Prior written permission should be obtained from the concerned police authorities for using loudspeakers.
+<END>
+User: Whether there is any time limit for using loudspeakers?
+Assistant: Yes. Loudspeaker can not be used at night between 10.00 P.M. and 6.00 A.M.
+<END>
+User: What is the deadline after which no public meetings and processions can be taken out?
+Assistant: Public meetings cannot be held after 10 PM and before 6.00 AM. Further, Candidate can not hold public meetings and processions during the period of 48 hours ending with the hour fixed for the conclusion of poll. Suppose, poll day is 15th July and hours of poll are from 8.00 A.M to 5.00 P.M., then the public meetings and processions shall be closed at 5.00 P.M on the 13th July. (Refer: Sec. 126 of Representation of People Act, 1951)
+<END>
+User: Whether there are any guidelines for political parties/candidates for issue of unofficial identity slips to voters?
+Assistant: Yes. The unofficial identity slip, on white paper, shall contain only the particulars of the voter i.e. name, Serial number of voter, part No. in the electoral roll, s.no. and name of Polling Station and date of Poll. It should not contain the name of candidate, his photograph and symbol.
+<END>
+User: Is there any restriction on appointment of a Minister/M.P./ M.L.A/M.L.C or any other person who is under security cover as an Election Agent/Polling Agent/Counting Agent?
+Assistant: Yes. A candidate cannot appoint a Minister/M.P./ MLA/MLC or any other person who is under security cover, as an election/polling agent/counting agent, as his personal security shall be jeopardized with such appointment, because his security personnel will not under any circumstances be permitted to accompany him into the 100 meter perimeter of polling stations described as the “Polling Station Neighbourhood" and within the polling booth and campus of counting centre and within the counting centre. Also any person having security cover will not be allowed to surrender his security cover to act as such agent of a candidate.
+<END>
+User: Who is the authority to issue permits to Star Campaigners (Leaders) of the Political Parties who avail benefit under Section 77(1) of R.P Act, 1951?
+Assistant: In case the mode of road transport is to be availed of by Star Campaigners (Leaders) of political, the permit will be issued centrally by the Chief Electoral Officer. If such party applies for issue of permit for the same vehicle to be used by any leader for election campaigning throughout the State, the same may be issued for such vehicle centrally by the Chief Electoral Officer, which will be prominently displayed on windscreen of such vehicle(s) to be used by concerned leader(s). If different vehicles are to be used by such party leaders in different areas, then the permit can be issued against the name of the person concerned who will display it prominently on the windscreen of the vehicle being used by such leader.
+<END>
+User: Whether Opinion poll or Exit poll can be conducted, published, publicized or disseminated at any time?
+Assistant: No. The result of any opinion poll or exit poll conducted shall not be published, publicized or disseminated in any manner by print, electronic or any other media, at any time- during the period of 48 hours ending with the hour fixed for closing of poll in an election held in a single phase; and in a multi-phased election, and in the case of elections in difference States announced simultaneously, at any time during the period starting from 48 hours before the hour fixed for closing of poll in the first phase of the election and till the poll is concluded in all the phases in all States. POLL DAY
+<END>
+User: Is it necessary to obtain written permission of the concerned Government authorities or local authorities for setting up of election booth?
+Assistant: Yes. It is necessary to obtain the written permission of the Government authorities concerned or local authorities before setting up of such booths. Written permission must be available with the persons manning the booth for production before the police /election authorities concerned on demand.
+<END>
+User: Is there any restriction of canvassing in or near polling station?
+Assistant: Yes. Canvassing for votes etc. within a distance of one hundred meters of polling station is prohibited on the day of poll. (Refer : Section 130 of Representation of 1951)
+<END>
+User: Is there any restriction of going armed to or near polling station?
+Assistant: Yes. No person is allowed to go armed with arms as defined in Arms Act 1959 of any kind within the neighbourhood of a polling station on the day of poll. (Refer: Section 134B of Representation of 1951)
+<END>
+User: How many vehicles a candidate is entitled for on the day of poll?
+Assistant: 1. For an election to the House of the People, a candidate will be entitled to: One vehicle for candidate's own use in respect of the entire constituency. One vehicle for use of candidate's election agent for entire constituency. In addition, one vehicle for use of candidate's workers or party workers, as the case may be, in each of the assembly segments comprised in the Parliamentary Constituency.
+2. For an election to the State Legislative Assembly, a candidate will be entitled to: One vehicle for candidate's own use One vehicle for use of candidate's election agent In addition, one vehicle for use of candidate's workers or party workers.
+<END>
+User: If the candidate is absent from the constituency on the day of poll, can the vehicle allotted in his name be used by any other person?
+Assistant: No. Vehicle allotted for candidate's use is not allowed to be used by any other person.
+<END>
+User: Can any type of entitled vehicle be used on the day of poll?
+Assistant: No. The candidate or his agent or party workers or workers will be allowed to use only four/three/two wheeler vehicles i.e. cars (of all types), taxis, auto rickshaws, rickshaws and two wheelers. In these vehicles not more than five persons including drivers are allowed to move on the day of poll.
+<END>
+User: Whether Political Party/Candidate can make arrangements for transporting voter to and from Polling Station?
+Assistant: No. Any arrangement, direct or indirect, to carry any voter to or from polling station by any kind of vehicle used for transport is a criminal offence. (Refer: Sec. 133 of Representation of People Act, 1951)
+<END>
+User: Can a leader of Political party use private fixed-wing aircraft and helicopters for the purposes of supervising and monitoring the polling and counting process on the day of poll and counting?
+Assistant: No. Leader of a political party is not allowed to use private fixed-wing aircraft and helicopters for the purposes of supervising and monitoring the polling and counting process on the day of poll and counting.
+<END>

@@ -1,0 +1,44 @@
+User: VVPAT system should be redesigned to be fully voter-verified. The voter should be able to approve the VVPAT printout before the vote is finally cast and be able to cancel if there is an error. Why shouldn’t ECI implement this?
+Assistant: Every vote is verified by the voter and given the available provision in the statute ( Rule 49 MA ) for the voter to report any discrepancy between his choice of vote in the BU and VVPAT slip, such a modified system may be superfluous.
+<END>
+User: When is the First Level Checking of EVMs/VVPATs conducted?
+Assistant: First Level Checking of EVMs and VVPATs for use in election is conducted before every election.
+
+In case of general elections to State Legislative Assembly and Lok Sabha, FLC is generally conducted at least 4 months and 6 months respectively before election. In case of byeelection, FLC is conducted generally within 1 month of occurrence of vacancy.
+<END>
+User: What are the processes involved in First Level Checking of EVMs? (Part 1)
+Assistant: The following processes are involved in First Level Checking of EVMs and VVPATs, which are conducted in the presence of the representatives of the recognized political parties:
+
+Cleaning of Machines:
+
+It includes dusting and removal of earlier address tags, ballot papers, cleaning of unwanted superscriptions from EVMs/VVPATs.
+
+Visual Inspection:
+
+Visual Inspection of BU, CU, VVPAT, connecting cable, connector, latches, carrying cases etc., is conducted to ensure there is no physical damage or breakage of plastic parts, latches, switches etc.
+
+Internal inspection of BU/CU/VVPAT:
+
+In order to provide assurance to the political parties, the authorised engineers ensure opening of Cabinets of BU and CU in the presence of the representatives of National and State Recognised Political parties during FLC and carry out visual inspection of PCB and check for spurious components, if any. Authorised engineers certify the same in prescribed format.
+
+Functionality Checks using Pre-FLC Unit (P-FLCU):
+
+The functionality and electrical checks of CU, BU and VVPAT are conducted using Pre-FLC Unit (P-FLCU).
+
+Symbol Loading in VVPAT using Symbol Loading Unit (SLU):
+
+Voter Verifiable Paper Audit Trail (VVPAT) is moved to Symbol Loading stage. Symbol loading in VVPAT is done using Symbol Loading Unit (SLU) and having facilitation of simultaneous viewing of symbol loading on TV/Monitor (at least 24”) to the representatives of National and State Recognized political parties who are present during the FLC. It may be noted that only dummy symbols are loaded in the VVPATs for conduct of FLC and Mock polls.
+
+Casting of 96 Votes:
+<END>
+User: What are the processes involved in First Level Checking of EVMs? (Part 2)
+Assistant: P-FLCU passed CU, BU and VVPAT (after symbol loading) are connected and 96 votes are cast [i.e.6 votes to each candidate button of the BU (16x6=96)]. Electronic result of EVMs and paper count of VVPAT slips are verified. Thereafter, result is cleared from Control Unit. This process is conducted for all units available for FLC i.e. BU/CU/VVPAT.
+
+FLC Sticker Labelling:
+
+Once a unit passes the above stages, Green FLC OK sticker is pasted on Control Unit (CU)/ Ballot Unit (BU)/ Voter Verifiable Paper Audit Trail (VVPAT). Red Sticker with reason is pasted on FLC rejected units. Signatures of BEL/ECIL Engineers and the representatives of DEO are made on both the stickers as applicable. Pink paper seals are pasted on CU and signed by FLC Engineer and FLC Supervisor. The representatives of the recognised political parties are also permitted to sign on the seals.
+
+Conduct of Mock Poll:
+
+Mock poll in 5% of randomly selected EVMs (i.e. 1200 votes in 1% EVMs, 1000 votes in 2% EVMs and 500 votes in 2% EVMs), using VVPATs, is conducted in the presence of representative of recognized National and State Political Parties. Counting of printed ballot slips of each VVPAT is verified/tallied with the electronic result of the respective CU. The results are shown to the representatives of the recognized National and State Political Parties and their signatures are taken in a prescribed register. It is to be noted that for the... [truncated]
+<END>

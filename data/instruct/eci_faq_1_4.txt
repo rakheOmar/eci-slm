@@ -1,0 +1,66 @@
+User: Which authority conducts elections to the offices of the President and Vice-President of India ?
+Assistant: Election Commission of India (ECI) Under Article 324(1) of the Constitution of India, the Election Commission of India, interalia, is vested with the power of superintendence, direction and control of conducting the elections to the offices of the President and Vice-President of India. Detailed provisions are made under the Presidential and Vice Presidential Elections Act, 1952 and the rules made thereunder.
+<END>
+User: Which authority conducts elections to Parliament?
+Assistant: Election Commission of India (ECI) The same Article 324 also vests in the Commission the powers of superintendence, direction and control of the elections to both Houses of Parliament. Detailed provisions are made under the Representation of the People Act, 1951 and the rules made thereunder.
+<END>
+User: Which authority conducts elections to the State Legislative Assemblies and Legislative Councils?
+Assistant: Election Commission of India (ECI) Article 324 (1) also vests in the Commission the powers of superintendence, direction and control of the elections to both Houses of the State Legislature. Detailed provisions are made under the Representation of the People Act, 1951 and the rules made thereunder.
+<END>
+User: Which authority conducts elections to Corporations, Municipalities and other Local Bodies ?
+Assistant: The State Election Commissions (SECs) The State Election Commissions constituted under the Constitution (Seventy-third and Seventy-fourth) Amendments Act, 1992 for each State / Union Territory are vested with the powers of conduct of elections to the Corporations, Muncipalities, Zilla Parishads, District Panchayats, Panchayat Samitis, Gram Panchayats and other local bodies. They are independent of the Election Commission of India.
+<END>
+User: What is the present composition of the Election Commission?
+Assistant: A Three - Member Body At present, the Election Commission of India is a three-member body, with one Chief Election Commissioner and two Election Commissioners.
+<END>
+User: Has the Election Commission been a multi-member body from the beginning?
+Assistant: No. It was not a multi member body from the beginning. It was a single - member body when it was first set up in 1950 and up to 15th October, 1989 with only the Chief Election Commissioner. From 16th October, 1989 upto the 1st January, 1990, it became a three-member body with R.V.S.Peri Sastri (C.E.C) and S.S.Dhanoa and V.S.Seigell as Election Commissioners. From 2nd January, 1990 to 30th September, 1993, it was a single-member Commission and again from 1st October, 1993 it has become a three-member Commission.
+<END>
+User: What is the status Chief Election Commissioner and the Election Commissioners in terms of salaries and allowances etc.?
+Assistant: Equivalent to Supreme Court Judges. The Chief Election Commissioner and the two Election Commissioners draw salaries and allowances at par with those of the Judges of the Supreme Court of India as provided for by the Chief Election Commissioner and other Election Commissioners (Conditions of Service) Rules, 1992.
+<END>
+User: What is the term of office of the Chief Election Commissioner? Is it different from the Election Commissioners?
+Assistant: The Chief Election Commissioner or an Election Commissioner holds office for a term of six years from the date on which he assumes his office. However, where the Chief Election Commissioner or an Election Commissioner attains the age of sixty-five years before the expiry of the said term of six years, he shall vacate his office on the the date on which he attains sixty-five years of age.
+<END>
+User: When the Commissioner becomes a multi-member Commission, how are the decisions taken, whether by majority or by consensus?
+Assistant: Section 10 of the Chief Election Commissioner and other Election Commissioners (Conditions of Service) Amendment Act, 1993 is reproduced below:- (1) The Election Commission may be by unanimous decision, regulate the procedure for transaction of to business as also allocation of its business amongst the Chief Election Commissioner and their Election Commissioners. (2) Save as provided in sub section (i) all business of the Election Commission shall, as far as possible, be transacted unanimously. (3) Subject to the provisions of sub-section (ii), if the Chief Election Commissioner and other Election Commissioners differ in opinion on any matter, such matter shall be decided by according to the opinion of the majority.
+<END>
+User: Who appoints the Chief Election Commissioners and Election Commissioners?
+Assistant: The President. Under Article 324(2) of the Constitution of India, the President of India is empowered to appoint the Chief Election Commissioner and the Election Commissioners.
+<END>
+User: Who fixes the number of Election Commissioners (other than Chief Election Commissioner)?
+Assistant: The President. Article 324(2) also empowers the President of India to fix from time to time the number of Election Commissioners other than the Chief Election Commissioner.
+<END>
+User: Who supervises the election work in a State ?
+Assistant: The Chief Electoral Officer (CEO). As per section 13A of the Representation of the People Act 1950, read with section 20 of the Representation of the People Act, 1951, the Chief Electoral Officer of a State/ Union Territory is authorised to supervise the election work in the State/Union Territory subject to the overall superintendence, direction and control of the Election Commission.
+<END>
+User: Who appoints the Chief Electoral Officer?
+Assistant: Election Commission of India (ECI) The Election Commission of India nominates or designates an Officer of the Government of the State/Union Territory as the Chief Electoral Officer in consultation with that State Government/Union Territory Administration.
+<END>
+User: Who supervises the election work in a District?
+Assistant: The District Election Officer (DEO) As per section 13AA of the Representation of the People Act 1950, subject to the superintendence, direction and control of the Chief Electoral Officer, the District Election Officer supervises the election work of a district.
+<END>
+User: Who appoints the District Election Officer?
+Assistant: Election Commission of India (ECI). The Election Commission of India nominates or designates an Officer of the State Government as the District Election Officer in consultation with the State Government.
+<END>
+User: Who is responsible for the conduct of elections in any Parliamentary or Assembly constituency ?
+Assistant: Returning Officer (RO) The Returning Officer of a parliamentary or assembly constituency is responsible for the conduct of elections in the parliamentary or assembly constituency concerned as per section 21 of the Representation of the People Act 1951.
+<END>
+User: Who appoints the Returning Officer?
+Assistant: Election Commission of India (ECI) The Election Commission of India nominates or designates an officer of the Government or a local authority as the Returning Officer for each of the assembly and parliamentary constituencies in consultation with the State Government/Union Territory Administration. In addition, the Election Commission of India also appoints one or more Assistant Returning Officers for each of the assembly and parliamentary constituencies to assist the Returning Officer in the performance of his functions in connection with the conduct of elections.
+<END>
+User: Who is responsible for the preparation of electoral rolls for a Parliamentary or Assembly Constituency?
+Assistant: Electoral Registration Officer (ERO) The Electoral Registration officer is responsible for the preparation of electoral rolls for a parliamentary / assembly constituency.
+<END>
+User: Who conducts the poll at a polling station?
+Assistant: Presiding Officer The Presiding Officer with the assistance of polling officers conducts the poll at a polling station.
+<END>
+User: Who appoints the Electoral Registration officer?
+Assistant: Under section 13B of the Representation of the People Act, 1950, the Election Commission of India, in consultation with the State / UT Government, appoints an Officer of the Government or the Local Authorities as the Electoral Registration Officer. In addition, the Election Commission of India also appoints one or more Assistant Electoral Registration Officers to assist the Electoral Registration Officer in the performance of his functions in the matter of preparation / revision of electoral rolls.
+<END>
+User: Who appoints Presiding Officers and Polling Officers?
+Assistant: District Election Officer (DEO) Under section 26 of the Representation of the People Act 1951, the District Election Officer appoints the Presiding Officers and the Polling Officers. In the case of Union Territories, such appointments are made by the Returning Officers.
+<END>
+User: Who appoints Observers?
+Assistant: Election Commission of India (ECI) Under section 20B of the Representation of the People Act 1951, the Election Commission of India nominates officers of Government as Observers (General Observers and Election Expenditure Observers) for parliamentary and assembly constituencies. They perform such functions as are entrusted to them by the Commission. Earlier, the appointment of Observers was made under the plenary powers of the Commission. But with the amendments made to the Representation of the People Act, 1951 in 1996, these are now statutory appointments. They report directly to the Commission.
+<END>

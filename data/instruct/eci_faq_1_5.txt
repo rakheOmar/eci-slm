@@ -1,0 +1,90 @@
+User: Who elects the President of India?
+Assistant: The President is elected by the members of an electoral college consisting of the elected members of both the Houses of Parliament and the elected members of the Legislative Assemblies of States and the Union Territories of Delhi and Pondicherry.
+<END>
+User: What is the manner of election of President?
+Assistant: According to Article 55 of the Constitution, as for as practicable, there has to be uniformity in the scale of representation of the different states at the election of the President. For the purpose of securing such uniformity among the States, the number of votes to which each State is entitled is determined as follows:- (a) every elected member of the legislative assembly of a State shall have as many votes as there are multiples of one thousand in the quotient obtained by dividing the population of the state by the total number of elected members of the Assembly; (b) If after taking the said multiples of one thousand, the remainder is not less than five hundred, then the vote of each member shall be further increased by one; (c) each elected member of either House of Parliament shall have such number of votes as may be obtained by dividing the total number of votes assigned to the members of the State Legislation Assemblies by the total number of elected members of both the House of Parliament fractions exceeding one-half being counted as one and other fractions being disregarded. The election of the President shall be held in accordance with the system of proportional representation by means of the single transferable vote and the voting shall be by secret ballot.
+<END>
+User: What is the term of office of President?
+Assistant: The President shall hold office for a term of five years from the date on which he enters upon his office.
+<END>
+User: Will there be any situation in which the President demits office before the five year term?
+Assistant: Yes There will be two such situations. The first is when the President resigns his office by writing under his hand addressed to the Vice-President and the second when the President is removed from office by impeachment for violation of the constitution.
+<END>
+User: What is the procedure for impeachment of the President?
+Assistant: According to Article 61 of the Constitution, when a President is to be impeached for violation of the Constitution, the charge shall be preferred by either House of Parliament. No such change shall be preferred unless (a) the proposal to prefer such change is contained in a resolution which has been moved after at least fourteen days' notice in writing signed by not less than one-fourth of the total number of members of the House has been given of their intention to move the resolution, and (b) such resolution has been passed by a majority of not less than two-third of the total membership of the House.
+<END>
+User: Is the President eligible for election for a second term?
+Assistant: Yes According to Article 57 of the Constitution, a President is eligible for re-election to that office.
+<END>
+User: What are the qualifications for election as President?
+Assistant: According to Article 58 of the Constitution, no person shall be eligible for election as President unless he is a citizen of India, has completed the age of thirty-five years and is qualified for election as a member of the House of the People. A person shall not be eligible if he holds any office of profit under the Government of India or the Government of any State or under any local or other authority subject to the control of any of the said Government.
+<END>
+User: Can a Member of Parliament or the State Legislature become the President?
+Assistant: The President shall nor be a member of either House of Parliament or of a House of the Legislature of any state and if any such member is elected President he shall be claimed to have vacated his seat in that House on the date on which he enters upon office as President.
+<END>
+User: Who elects the Vice-President of India?
+Assistant: The Vice-President is elected by the members of an electoral college consisting of the members of both House of Parliament.
+<END>
+User: What is the manner of election of Vice-President?
+Assistant: The election is in accordance with the system of proportional representation by means of the single transferred vote and the voting is by secret ballot.
+<END>
+User: What is the term of office of Vice-President?
+Assistant: The Vice-President shall hold office for a term of five years from the date on which he enters upon his office.
+<END>
+User: Will there be any situation in which the Vice-President demits office before the five-year term?
+Assistant: Yes There will be two such situations. The first is when the Vice-President resigns his office by writing under his hand addressed to the President and the second when he is removed from office.
+<END>
+User: What is the procedure for removal of the Vice-President?
+Assistant: The Vice-President may be removed from his office by a resolution of the Council of States by a majority of all the members of the Council and agreed to by the House of the People. No such resolution shall be moved unless at least fourteen days' notice has been given of the intention to move the resolution.
+<END>
+User: What are the qualifications for election as Vice-President?
+Assistant: According to Article 66 of the constitution, no person shall be eligible for election as Vice-President unless he is a citizen of India, has completed the age of thirty-five years and is qualified for election as a member of the Council of States. A person shall not be eligible if he holds any office of profit under any local or other authority subject to the control of any of the said Governments.
+<END>
+User: Is there any provision for challenging the election of President or Vice-President?
+Assistant: Yes According to Article 71 of the Constitution, all doubts and disputes arising out of or in connection with the election of a President or Vice-President shall be inquired into and decided by the Supreme Court. Further, according to section 14 of the Presidential and Vice-Presidential Elections Act, 1952, an election petition can be filed before the Supreme Court.
+<END>
+User: What can be the maximum number of members of Rajya Sabha?
+Assistant: 250 The maximum number of members of Rajya Sabha can be 250. Article 80 of the Constitution of India provides that 12 members are to be nominated by the President of India and not more than 238 representatives from the States to be elected by the elected members of the State Legislative Assemblies in accordance with the system of proportional representation by means of the single transferable vote.
+<END>
+User: Are they all elected?
+Assistant: No All of them are not elected. As mentioned above, 12 are nominated and 238 are to be elected.
+<END>
+User: What is the present strength of Rajya Sabha?
+Assistant: 245 Members. 12 are nominated and 233 are elected.
+<END>
+User: What is the life of Rajya Sabha?
+Assistant: Rajya Sabha is a Permanent House and is not subject to dissolution as per Article 83 (1) of the Constitution of India. But as nearly as possible, one third of its members shall retire every 2nd year and an equal number of members are chosen to replace them.
+<END>
+User: Who elects the members of the Rajya Sabha?
+Assistant: Elected members of the State Legislative Assemblies Article 80(4) of Constitution of India provides that members of Rajya Sabha shall be elected by the elected members of State Legislative Assemblies through the system of proportional representation by means of the single transferable vote.
+<END>
+User: Who nominates the members of the Rajya Sabha?
+Assistant: President of India The President of India nominates 12 members of Rajya Sabha as mentioned earlier.
+<END>
+User: Is there any special qualification for nomination?
+Assistant: Yes Article 80 (3) of the Constitution of India provides that the members to be nominated by the President to Rajya Sabha should have special knowledge or practical experience in matters like literature, science, art and social service. Article 84 (b) stipulates that a person shall be of not less than 30 (Thirty) years of age.
+<END>
+User: What is the term of Lok Sabha?
+Assistant: Normal Term : 5 years Article 83 (2) of the Constitution stipulates that Lok Sabha shall have a normal term of 5 years from the date appointed for its first meeting and no longer. However, the President may dissolve the House earlier.
+<END>
+User: What can be the maximum number of members of the Lok Sabha?
+Assistant: 550 The maximum number of elected members of Lok Sabha is 550. Article 81 of the Constitution provides that not more than 530 members will be elected from the States and not more than 20 members from Union Territories. Article 331 of the Constitution provides that not more than 2 members from the Anglo Indian Community may be nominated by the President of India, if in his opinion that community is not adequately represented in that House.
+<END>
+User: How are the members of Lok Sabha elected?
+Assistant: Under Sec 14 of Representation of People Act 1951, the President of India by a notification will call upon the constituencies to elect their members to the House of People. Thereafter the electors of the Parliamentary Constituencies will directly elect the Lok Sabha members. As per article 326 of the Constitution of India, elections to the House of the People shall be on the basis of adult suffrage.
+<END>
+User: How many members are elected by the electors of a Parliamentary Constituency?
+Assistant: One Each Parliamentary Constituency will elect only one member.
+<END>
+User: Was this the position from the very beginning?
+Assistant: No Prior to 1962, there were both single - member and multi member constituencies. These multi - member constituencies used to elect more than one member. The multimember constituencies were abolished in 1962.
+<END>
+User: When was the 1st general election held in India?
+Assistant: 1951-52 The first general election was held in India during 1951 - 1952.
+<END>
+User: At that time, what was the total strength of the Lok Sabha?
+Assistant: The total strength of Lok Sabha at that time was 489.
+<END>
+User: What is the composition of Parliament of India?
+Assistant: According to Article 79 of the Constitution of India, the Parliament consists of President of India and the two Houses of Parliament known as Council of States (Rajya Sabha) and House of the People (Lok Sabha).
+<END>

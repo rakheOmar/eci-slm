@@ -1,0 +1,46 @@
+User: Is it true that commissioning of EVMs is done by the engineers of BEL and ECIL?
+Assistant: No, commissioning of EVMs is done by the election officials deputed by the District Election Officer/Returning Officer in presence of contesting candidates or their authorized representatives present . Generally, two BEL/ECIL engineers per Assembly Constituency/Segment are available to assist in symbol loading in VVPATs.
+<END>
+User: Does ECI loan EVMs to any other organizations to conduct elections?
+Assistant: Election Commission of India provides EVMs on loan basis only to State Election Commissions (SEC) to conduct their local body elections, based on the requests received, considering the following conditions:
+1. Law(s) governing Local Bodies elections provide for use of EVMs.
+2. Only those models of EVMs which are discontinued for deployment by ECI to conduct elections to Parliamentary and Assembly Constituencies and which are within the period of economic life of 15 years are loaned.
+3. Subject to availability of such EVMs with ECI.
+4. ECI may seek any report from SECs about loaned EVMs as required.
+<END>
+User: Who conducts the First Level Checking of EVMs and VVPATs?
+Assistant: First Level Checking of EVMs and VVPATs is conducted by the authorised engineers of Bharat Electronics Limited (BEL) and Electronics Corporation of India Limited (ECIL), as the case may be, at district headquarters under supervision of District Election Officer, and in the presence of the representatives of the National and State recognised political parties.
+<END>
+User: If we get hold of a VVPAT printed slip can we know from which VVPAT machine it was printed?
+Assistant: Yes. VVPAT slips have the unique ID number of the VVPAT that printed the slips. Therefore, from the unique ID number mentioned on the VVPAT printed slips, we will be able to identify the source VVPAT.
+<END>
+User: What are the specifications of powerpacks used for CU/BU/VVPAT?
+Assistant: Rating of power pack of CU is 7.5Volts, 2AH. Rating of power pack of VVPAT is 22.5 volts, 4AH. BU uses the same power pack as the CU when more than four BUs are used. May also please refer General Queries FAQ Qn.no.12.
+<END>
+User: What are the details printed on the slips?
+Assistant: Printed slip of VVPAT contains the following information:
+
+Candidate Serial Number
+Name of the Candidate
+Symbol of party or Candidate
+Session Number
+VVPAT ID
+
+These details could be viewed by the voter.
+<END>
+User: What is the size of VVPAT slips and what are the properties of VVPAT slips?
+Assistant: The VVPAT printed slip is approximately 99mm x 56mm in size. The VVPAT slip is basically thermal paper with a print retention capability of about five years when stored properly.
+<END>
+User: How do we know when the powerpack is about to get over (CU and VT) and they are to be replaced?
+Assistant: The power packs of CU and VVPAT are periodically monitored and the balance power status is displayed by the Control Unit as “High”, “Medium”, “Low”, “Marginal” and “Change Battery” along with the percentage.
+The power packs are replaced from the “Reserve” power packs available with the Sector Officers when the “Change Battery” status is displayed by the CU.
+<END>
+User: Whether the Election Commission has full control of the entire voting process through EVM?
+Assistant: Yes, Election Commission has full control over entire voting process. All election officials work directly under the direction, supervision and control of Election Commission of India during the election period.
+<END>
+User: Do EVMs malfunction?
+Assistant: EVMs are electronic machines and like any other machine they are also vulnerable to failures. The failed machines are sent to the factories for rectification. However, there is no question of any machine ‘malfunctioning’ in a way so as to favour a particular candidate, which is called tampering as per defined EVM protocol. This scenario is just not possible with the many safeguards incorporated in design of EVM itself.
+<END>
+User: How can a voter be sure that the EVM is working and his/her vote has been recorded.
+Assistant: As soon as the voter presses the `blue button’ on the BU against the serial number, name and symbol of the candidate of his/her choice, an LED against the candidate button glows red and the VVPAT prints a slip having serial number, name and symbol of the chosen candidate which is visible for about 7 seconds before getting cut and stored in the sealed Drop Box of the VVPAT. A loud beep sound...
+<END>

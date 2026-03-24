@@ -1,0 +1,99 @@
+User: In the affidavit is a candidate needed to file all the particulars of only government dues or also dues of local self government like Municipality, Panchayat etc. and also dues pending for government contracts?
+Assistant: Details of dues to Departments dealing with the Government accommodation, supply of water and electricity, telephone/mobiles, transport (including aircraft and helicopters), income/wealth/service tax, municipality property tax will have to be shown in reppective columns provided in Item (8)(ii) of Form-26. Any other Government dues will have to be shown in the last row of Item (8)(i).
+<END>
+User: As mentioned in point no. 5 (II) of Form-26 the cases pending against a candidate in which cognizance has been taken by the court is required to be given. Please qualify the word COGNIZANCE?
+Assistant: Please see the provisions of Section 190 of CrPC.
+<END>
+User: Whether 1st Class Magistrate Executive Magistrate are the same. Kindly elaborate with legal provisions.
+Assistant: It varies from State to State. Generally, Executive Magistrates cannot be equated with 1st Class Magistrate.
+<END>
+User: Whether the mentally retarded person or unsound mind person are to be treated as same or there is legally some difference? Kindly elaborate.
+Assistant: For contesting election, only if a person has been declared by the competent court as of unsound mind under the Lunacy Act, he/she cannot contest any election.
+<END>
+User: Whether the nomination paper filed by a candidate not signed at the time of submission or filing of nomination papers can be signed thereafter before scrutiny of nomination papers or not?
+Assistant: At the time of scrutiny, if any nomination paper of a candidate is found without the signature of the candidate, the RO should reject the nomination as it is a defect of substantial nature. Signature cannot be affixed subsequently.
+<END>
+User: In case of reserved constituency, the SC/ST certificate if objected to on the ground that the caste/ tribe do not figure in the list of the Constitution (Scheduled Castes) and (Scheduled Tribes), Order 1950, even though the certificate is proved to be issued by a competent authority, then what happens?
+Assistant: A person shall not be qualified to be chosen to fill a seat in the Legislative Assembly of a State unless in the case of a seat reserved for the Scheduled Castes or for the Schedule Tribes of that State, he should belong to any of those castes or of those tribes of that state, as the case may be, and is an elector of any Assembly constituency in that State. If the Caste/Tribe to which the candidate belongs is not one of the Castes/Tribes in the list of Scheduled Castes/Tribes for the State, then the candidate cannot treated as qualified to contest from that reserved seat.
+<END>
+User: Does “Magistrate 1st Class” before whom the affidavit on Form 26 is to be sworn include “Executive Magistrate”?
+Assistant: Affidavit should be sworn before only the magistrate of 1st class, notary public and commissioner of oath appointed by the High Court of the state concerned. Executive Magistrates cannot be treated as 1st Class Magistrates for this purpose, unless they are also specified as 1st Class Magistrate in any State.
+<END>
+User: Is a candidate, in contractual obligation with any Gram/ Taluka/ District Panchayat or any other local body like municipality disqualified under section 9A of the R. P. Act, 1951?
+Assistant: No, only subsisting contract supply of goods or execution of works with the government of the State concerned and not with the local authority will attract disqualification under Section 9A of the R. P. Act, 1951, for election to the Legislative Assembly of that State. For Parliament election, such contract with the Central government alone will attract disqualification.
+<END>
+User: If the candidate of one political party remarks adversely against another party candidate in news/news papers. Can this be considered as “Paid News”?
+Assistant: There are various aspects that need to be looked into before calling a news item a suspected case of “Paid News”, like bias, undue favour, reads more like propaganda than news item, consistently one- sided, factually incorrect and in favour of a particular candidate in continuous opposition to another candidate etc. The MCMC has to apply its mind collectively to decide on each such cases based on samples evidences. One news report of a criticism of a political adversary need not constitute “Paid News”.
+<END>
+User: Can a proposer of any candidate be also a candidate for the same constituency?
+Assistant: Yes, as per law there is no bar.
+<END>
+User: If information given by a candidate in affidavit is wrong, can RO reject the nomination of the candidate? Especially, if other candidates raise objection and give proof that information in affidavit is wrong.
+Assistant: No, the nomination of a candidate cannot be rejected for suppressing or giving false information in the affidavit. The copies of the nomination papers filed by each candidate along with copy of the affidavit accompanying the nomination should be displayed on the notice board in the office of RO on the day the nomination is filed. If anyone furnishes any information contradicting the statements in the nomination form or affidavits by means of a duly sworn affidavit, copies of such affidavits should also be displayed on the notice board. If the RO is satisfied that the information given by the candidate in the affidavit is wrong he is required to file a formal complaint before the appropriate Court under section 125A of the R.P. Act, 1951 and Section 177 of IPC (read with section 200 CrPC).
+<END>
+User: If a complaint is received that a person who has filed nomination is of unsound mind, what course of action will be taken by RO?
+Assistant: The complainant has to prove by producing a declaration by the competent court under the Lunacy Act to the affect that the person concerned is of unsound mind. Disqualification is attracted only when there is a declaration by competent court.
+<END>
+User: What if 5 or more than 5 persons, who are proposers, happen to be illiterate their thumb impressions are to be attested, can we allow more than 5 persons in the RO room in that case?
+Assistant: Thumb impressions on the nomination paper has to be attested for which thumb impressions have to be put before the RO or before an Administrative Officer not below the rank of SDO. To enable the proposers to put their thumb impressions before RO, they shall be called by the RO in batches of four for putting the thumb impression in his presence.
+<END>
+User: Should the affidavits in Form 26, be in both English Gujarati or in any one language?
+Assistant: It has to be given either in English or in one local language of the state which is the official language and in case of Gujarat it can be in Gujarati.
+<END>
+User: If the affidavit of a candidate is objected to, and RO feels that it has some substance, does the RO himself initiate proceedings under RP Act or IPC or should objector do it?
+Assistant: Yes, the RO has to initiate proceeding under the relevant statutory provisions. (Pl. see Ans. To Q. No. 2)
+<END>
+User: For an independent candidate 10 proposers are required to sign the nomination paper before RO. If during scrutiny one proposer says it was not signed by him, what will RO do?
+Assistant: The RO shall ask the person concerned to submit an affidavit to this affect. If affidavit is submitted then RO shall make a summary inquiry to satisfy himself as to the authenticity of the signature of the proposer. The candidate shall be given adequatae opportunity to present his case. In case it is proved that the signature was forged, the nomination of the candidate will be rejected since the nomination with 9 proposers cannot be accepted as a valid nomination paper as per law in the case of candidates sponsored by registered unrecognized party and independent candidates.
+<END>
+User: Whether nomination papers of a candidate who was physically present just a minute before 3:00 PM on the last day of nomination, but without documents will be received or not?
+Assistant: Nomination paper if available with the candidate has to be received but no other document shall be permitted to be brought into his office after 3.00 PM. In the check list, the fact of not having submitted the relevant documents will be entered. Question of rejection of nomination paper will be decided at he time of scrutiny.
+<END>
+User: What is the time limit for filing Form 6, to include name in electoral rolls in case applicant wants to be candidate also.
+Assistant: Minimum 10 (Ten) days before the last date of making the nomination for an election. However, Form-6 filed thereafter upto the last date for filing nomination shall be received by the ERO but orders can be passed on each such Form only after completion of the election. Under the law, no order for inclusion of name in electoral roll can be made after the last date for making nomination. There are Court ruling clarifying that the cut-off time for passing orders in this regard would be 3.00 PM on the last day of filing of nomination. There are other statutory requirement of displaying the applications on the notice board by the ERO for 7 days, etc. before the ERO can pass orders on the claim application.
+<END>
+User: What document should be taken as proof of citizenship?
+Assistant: There is no specific document to prove the citizenship. For contesting elections from a state Legislative Assembly Constituency, the intending candidate should be enrolled in the electoral roll of any assemblyconstituency in that state. The presumption in normal course would be that such person is a citizen. In case somebody challenges the citizenship of a candidate, the onus is on the objector to produce sufficient proof before the RO in this regard. If this onus is discharged by the objector, the RO should prima-facie give an opportunity to the intending candidate to rebut the complaint. Generally, MHA issues such certificate of canceling citizenship.
+<END>
+User: If illiterate proposer himself denies about his thumb impression, how RO can decide on thumb impression validity? Should he call finger print expert?
+Assistant: The illiterate person proposing a candidate has to put his thumb impression before the RO or an Administrative Officer not below the rank of SDO. Therefore, the question of denial would not arise. In case the proposer denies, the RO has to satisfy himself by making summary inquiry. [Please see answer to question No. 16].
+<END>
+User: If major portion of affidavit is not filled at all, is it ground for rejection?
+Assistant: Yes, it will be a ground for rejection as it will be a defect of substantial nature. Under the Commission's instructions, the RO should depute a person who shall get filled all the details in the affidavit from the candidate. In case there is no information to be furnished by the candidate in any of the columns the candidate has to write “NIL or Not Applicable”, as the case may be.
+<END>
+User: If during scrutiny, a proposer says on affidavit that he has not signed on nomination papers, then what will RO do?
+Assistant: The RO has to satisfy himself about the signature of the proposers. In case he is satisfied after summary enquiry that the signature is not of the proposer as claimed by him then the nomination paper shall be rejected for want of required number of proposers and the person who filed the nomination paper with forged signature/thumb impression will have to be prosecuted under the law. However, the candidate concerned should be given adequate opportunity to present his case. If necessary, scrutiny proceedings in that candidates case can be adjourned.
+<END>
+User: Is oath required every time? With every nomination filed at different intervals of time by same candidate?
+Assistant: No. The oath is required to be taken and subscribed only once for an election. Even if a candidate is contesting from two constituencies, one oath is sufficient. It should be noted that oath can be taken only after the nomination paper is filed. It would be for the candidate to produce before the RO, the certificate of taking of oath as per the requirement of law.
+<END>
+User: What if independent candidate submits nomination paper with more than 10 proposers? Will it be valid?
+Assistant: Yes, minimum 10 proposers are required for independent candidate under the law. Excess is not a problem.
+<END>
+User: Regarding signature of a proposer, if in the summary inquiry, the RO finds that the signature is false, can the nomination be rejected?
+Assistant: Yes, in case, the RO finds on summary inquiry that the signature is false and the number of proposers then falls less than the required number, then that nomination paper will be rejected by the RO.[Please see answer to question Nos. 16 and 21]
+<END>
+User: Can the nomination papers be Photocopied allowed to be examined by other candidate? Or only original papers are to be given for examination?
+Assistant: Copies of nomination filed by each candidate along with the affidavit accompanying the nomination should be displayed on the notice board in the office of RO on the same day of filing nomination. At the time of scrutiny, the other candidate may be given opportunity to examine the original nomination papers without being allowed to physically handling the paper.
+<END>
+User: If in case of an overseas elector, the nomination paper is delivered on the last date of nomination, then he takes an Oath before a consular representative and if he or the consular representative faxes or sends a scanned copy of that form of Oath or a written communication to the RO, can it be allowed? Or the RO should insist for an original document?
+Assistant: Yes, fax/scanned copy can be relied upon if the original is not received before the scrutiny of nomination. The consular representative should, however, send the original of the oath or affirmation made and sighed by the candidate to the RO subsequently.
+<END>
+User: Can a candidate withdraw nomination immediately after scrutiny or has to wait till list of validly nominated candidates is prepared in Form-4?
+Assistant: He should wait till the RO prepares the list of validly nominated candidates in Form-4.
+<END>
+User: If a proposer is in all the four nominations, can he submit all the four nominations?
+Assistant: Yes, the proposer can submit all the four nominations in case he has proposed in all the four nominations.
+<END>
+User: If a candidate has been issued SC/ST certificate from other state as she has been after marriage residing in other state contesting election there, how RO should proceed further?
+Assistant: A person shall not be qualified to be chosen to fill a seat in the Legislative Assembly of a State unless in the case of a seat reserved for the Scheduled Castes or for the Schedule Tribes of that State, he should belong to any of those castes or of those tribes, as the case may be, in that state, and is an elector for any Assembly constituency in that State. In such cases, there should be a SC certificate issued by the competent authority of the State in which the person is contesting election.
+<END>
+User: How many persons are allowed to enter the RO's room when the nomination papers are being filed by independent/ unregistered party candidate? Is it 4+1 only? Also in case of illiterate proposers please?
+Assistant: Only 4 persons can enter the office of RO other than the candidate. Since, illiterate person has to put a thumb impression before the RO or an Administrative Officer not below the rank of SDO, all illiterate proposers who have not already appended their thumb impression before any other authorized officer, shall be called by the RO in batches of four, for putting the thumb impression in front of him.
+<END>
+User: Suppose, a candidate filing nomination papers is not a voter of that particular Assembly Constituency, then he will produce a certified extract from the electoral rolls. But as continuous revision is going on, which should be the latest date of that certificate?
+Assistant: There is no last date. The certified extract should be in respect of the electoral rolls in force. Such extract can be filed till the time of scrutiny of nomination.
+<END>
+User: If an independent candidate's nomination form has 12 proposers and proposer no. 3 and 4 is not valid. Total 10 are valid out of the 12. Is that acceptable?
+Assistant: Yes, only 10 proposers as required for candidates of registered unrecognized parties and independents would still be left.
+<END>

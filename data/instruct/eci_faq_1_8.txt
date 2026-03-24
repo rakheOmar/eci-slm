@@ -1,0 +1,6 @@
+User: Who is responsible for the counting of votes and declaration of result of an election?
+Assistant: The Returning Officer According to Sec. 64 of the R. P. Act, 1951, votes are counted by or under the supervision / direction of the Returning Officer of the Constituency. When the counting is completed, the Returning officer declares the result as per provisions of Sec. 66 of R. P. Act, 1951.
+<END>
+User: After the declaration of results in all constituencies, which authority will constitute the new Lok Sabha - President or the Election Commission?
+Assistant: Election Commission of India (ECI) According to Sec. 73 of the R. P. Act, 1951, after the results of all Parliamentary constituencies are declared, the Election Commission will constitute the new Lok Sabha by notifying in the official gazette, the names of the elected members.
+<END>

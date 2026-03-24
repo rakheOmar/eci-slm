@@ -1,0 +1,139 @@
+User: What is the definition of Vulnerability in context of elections?
+Assistant: Susceptibility of any voter or section of voters to being wrongfully prevented from or influenced upon in relation to the exercise of his or her right to vote in a free and fair manner through intimidation or use of undue influence or force of any kind.
+<END>
+User: What is the purpose of Vulnerability Mapping?
+Assistant: To identify in advance such voters or section of voters who are likely to be vulnerable, the persons or other factors causing such vulnerability and/or to identify the villages/hamlets/habitats and segments of electorate vulnerable to any threat, intimidation.
+<END>
+User: What are the stages of Vulnerability Mapping?
+Assistant: 1. Identification of the voters/voter segments, village/hamlets vulnerable to threat or intimidation or undue influence.
+2. Identification of the persons causing such vulnerability using muscle/ money power.
+3. Initiating preventive measures against the persons responsible for causing vulnerability.
+<END>
+User: When should the exercise of VM be started?
+Assistant: It should be started 6 months before the date of poll of last held election.
+<END>
+User: When is the time for final identification of the vulnerable area / segment / village / hamlet?
+Assistant: The final identification is to be done after the issue of press note by the Commission and before the issue of the gazette notification.
+<END>
+User: When is the Sector Officer appointed to look after the VM?
+Assistant: 4(Four) months before the date of poll of last held election.
+<END>
+User: What is the role of Sector Police Officer in VM?
+Assistant: Sector Police Officer will accompany the Sector Officer and jointly conduct the exercise of Vulnerability Mapping in given area.
+<END>
+User: How many polling stations are covered by one Sector Officer?
+Assistant: 10 to 12 polling stations, that can be covered in 1 to 2 hours.
+<END>
+User: Can central govt. officers be deployed as Sector Officers?
+Assistant: Yes, if required
+<END>
+User: Who is designated as Sector Magistrates during elections?
+Assistant: Sector Officer is designated as Sector Magistrate for the same area at least 7 days before the day of poll.
+<END>
+User: What is the minimum criteria for Sector Police Officer?
+Assistant: Not below the rank of Assistant Sub-Inspector or Head Constable of Police.
+<END>
+User: How many times does the Sector Officer need to visit in first stage of VM?
+Assistant: Minimum three visits jointly with HC/ASI/Police Officer
+<END>
+User: Who finalise the list of critical polling stations?
+Assistant: Senior Most General and Police Observer appointed by the Commission.
+<END>
+User: How many reporting formats are there for Vulnerability Mapping?
+Assistant: There are 6 reporting formats (VM-1 to VM-6) for Vulnerability Mapping. The details are available on Commissions’ website at URL.
+<END>
+User: What is a critical polling station?
+Assistant: Polling Stations are categorised critical on basis of certain objective criteria to ensure enhanced security measures such as deployment of CAPFs, provision of sufficient Civil measures etc. The details are available on Commissions’ website at URL.
+<END>
+User: Is it mandatory to deploy CAPFs at all critical polling stations?
+Assistant: Yes, all critical polling stations shall have deployment of CAPFs to the maximum possible extent.
+<END>
+User: Is there any difference between vulnerability and Criticality?
+Assistant: Vulnerability is related to voters/voters’ segments/villages/hamlets/areas whereas criticality is related to polling stations. Vulnerability is one of the parameters for criticality however, vice versa may not be true. REQUISITION OF PREMISES AND VEHICLES
+<END>
+User: What are the legal provisions for requisition of vehicles and premises?
+Assistant: Sections 160 to 167 of the Representation of the People Act, 1951 contain various legal provisions related to requisition.
+<END>
+User: What is the payment of compensation for requisition of Premises?
+Assistant: The amount of compensation is determined by taking into consideration the following:
+(i) the rent payable in respect of the premises or if no rent is so payable, the rent payable for similar premises in the locality;
+(ii) if in consequence of the requisition of the premises the person interested is compelled to change his residence or place of business, the reasonable expenses (if any) incidental to such change.
+<END>
+User: What is the payment of compensation for requisition of Vehicles?
+Assistant: For Requisition of Vehicles under the jurisdiction of Central Govt: no hire charges may be preferred whenever their vehicles are requisitioned by the concerned State Government or Union Territory Administration. However, cost of petrol, oil and minor repairs during the period of requisition would be borne by the concerned State Government. For Requisition of Transport Vehicles (Private): The State Government shall compensate the owner of the vehicle determined based on the fares or rates prevailing in the locality for the hire of such a vehicle.
+<END>
+User: Which Vehicles are exempted from Requisition?
+Assistant: Vehicles of World Health Organisation, UNICEF and all the organisations of UN, All India Radio, Doordarshan, Forest Department (Wild life sanctuaries, National sanctuaries, and National Games Park) will not be requisitioned for election duty. REQUISITION OF STAFF
+<END>
+User: What is the process for requisition of Polling Personnel?
+Assistant: Section 159 of the Representation of the People Act, 1951 may be referred to which is available on the Commission’s website at URL. The staff of any of the authorities, companies, institutions, concerns or undertakings mentioned in the Section 159, could be requisitioned and put on election duty, in addition to employees of Central and State Governments, in view of the above amendment
+<END>
+User: Under which Act/Rules, polling officials works under the ECI during election?
+Assistant: As per section 28A of the Representation of the People Act, 1951, the officials i.e. Returning Officer, Assistant Returning Officer, Presiding Officer, Polling Officer, and any other officer requisitioned under section 159 of the said Act and any police officer, shall be deemed to be on deputation to the Election Commission for the period commencing on and from the date of the notification calling for such election and ending with the date of declaration of the results of such election.
+<END>
+User: What are the exempted category of departments/depart ments/Ministries for requisition of election staff?
+Assistant: Exempted categories of personnel from being requisitioned for election duty are as follows:
+1. Senior officers of the Indian Forest Service
+2. Medical staff including doctors, nurses, ANMs etc. (except on health-related election duty)
+3. Ayurvedic Medical Officer (AMO), Unani Medical Officer (UMO) and Homoeopathic Medical Officer (HMO) of AYUSH Department (except on health-related election duty)
+4. Doctors and Compounders working in veterinary hospitals.
+5. Territorial Staff of Forest Department.
+6. Staff of All India Radio and Doordarshan
+7. Officers of Food Corporation of India
+8. Officers of rural branch of Commercial Banks if it is a single-officer branch
+9. Operational officers/staff of UPSC
+10. Besides above, Official due to retire within 6 months’ time or who has already retired but is on extension of service or re-employed should not be requisitioned for any election related duty.
+11. The operational/technical staff of BSNL, MTNL, Electricity companies will be requisitioned for election duty only in unavoidable circumstances. However, they can be requisitioned to perform duty related to their department for election purpose.
+12. Employees of Banks and LIC will be drafted on regular election duty to the minimum extent possible. However, they can be requisitioned to perform duty of micro-observers.
+<END>
+User: Is consent of any person to be deputed for an election duty required?
+Assistant: Section 26 of the Representation of the People Act, 1951 confers not only the power to the DEO to appoint unilaterally the Presiding and Polling Officers but also to impose on them all 7 the obligations of such office irrespective of their consent, at the peril of prosecution under section 134 of the said Act in default.
+<END>
+User: How are polling parties formed?
+Assistant: Polling parties are formed based on Randomization through a software on the data available in system.
+<END>
+User: How are election duties assigned?
+Assistant: Election duties are assigned on the basis of database prepared by DEO and work is allocated in consideration of pay, rank and status of the official.
+<END>
+User: What is the procedure for Randomization of Polling Personnel?
+Assistant: Randomization comprises of 3 stages: 1st: Randomly identify and select the officials that would be given training. 2nd: Formation of Assembly Constituency wise team (i.e. polling party) composition. 3rd: Final allocation of polling stations to polling parties, at the time of dispersal.
+<END>
+User: Is randomization of Police Personnel also done in the election?
+Assistant: Yes. Randomization of Police personnel at the Polling Station on the day of poll may be done in the following manner: -
+1. Police Constables / Home Guards coming from outside the district can be deployed without randomization.
+2. In case of Constables / Home Guards of the same District, they shall be deployed in the Polling Stations falling outside the area of the Police Station where they are presently posted. As far as practicable, randomization should be done in such a manner that they are posted in the same parliamentary Constituency where they are enrolled as voters to allow them to exercise their franchise through EDC.
+<END>
+User: How is Randomization of Female Polling Personnel conducted?
+Assistant: 1. Manual randomization of female polling personnel is done instead of computer randomization. They should be put on duty in the neighbouring polling stations through under the guidance of the Observer, so that they are able to go to the polling stations on the morning of the poll day at least 2 hours before the start of polling and assume their duties well in time.
+2. District Election Officer prepares a negative list of polling stations, which are inaccessible or remotely located and no female polling personnel should be posted to such polling stations.
+<END>
+User: Are persons belonging to PwD category deployed during election?
+Assistant: Physically challenged persons with disabilities defined under the Right of Persons with Disabilities Act, 2016, are deployed on election duty only under unavoidable circumstances. However, it is ensured that they should not be posted in any remote area, rather, they should invariably be posted at the polling stations located at the headquarters. If any PwD staff inadvertently is deployed at difficult locations, the RO should make necessary changes manually in consultation with the Observer.
+<END>
+User: Is randomization process applicable for Counting Staff?
+Assistant: Yes, Randomization process comprises of 3 stages:
+1. Randomly drawing 120% of the required number of officials for each category of counting officials.
+2. Allocation of Assembly Constituency/Segment.
+3. Allotment of counting tables.
+<END>
+User: What is the meaning of CAPFs?
+Assistant: Central Armed Police Forces (CAPFs) is collective name of Armed police organisations under Ministry of Home Affairs.
+<END>
+User: Which forces comprise of CAPF?
+Assistant: The Central paramilitary forces broadly consist of following forces under the control of MHA.
+1. Border Security Force (BSF)
+2. Central Industrial Security Force (CISF)
+3. Central Reserve Police Force (CRPF)
+4. Indo Tibetan Border Police (ITBP)
+5. Sashastra Seema Bal (SSB)
+6. Any other detailed by MHA
+<END>
+User: What is the purpose of deployment of CAPFs?
+Assistant: The Commission, invariably, directs deployment of CAPFs for free, fair and peaceful conduct of General Election/ByeElections to the Lok Sabha and State Assemblies.
+<END>
+User: What are the phases of Force Deployment?
+Assistant: The forces are deployed in 3 different phases viz., Pre-poll Deployment, Poll Day Deployment and Post-Poll Deployment.
+1. Poll day deployment is generally done in following four forms.
+2. Static deployment, Mobile deployment, Police Station/Control room deployment and Reserve deployment.
+3. Pre-poll deployment
+<END>

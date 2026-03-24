@@ -1,0 +1,102 @@
+User: Can the oath or affirmation be made and subscribed on the day of scrutiny of nomination papers at that election.
+Assistant: No, The oath or affirmation should be made and subscribed before the date fixed by the Election Commission for scrutiny of nomination papers at that election. The decisions of the Supreme Court in PasupatiNathsingh vs. Harihar Prasad Singh (A.I.R. 1968 S.C.- 1064) and Khadar Khan Hussain Khan and other vs. Nijalingapppa [(1970) (1) S.C.A-548] have clarified the position and removed all doubts in regard to actual making and subscribing the oath or affirmation. According to these judgments, the oath or affirmation can be made and subscribed by a candidate only after his nomination paper is delivered and it cannot be so made and subscribed on the date of scrutiny. It has to be made before the date fixed for scrutiny.
+<END>
+User: Whether same proposer can propose the nomination of more than one candidate?
+Assistant: Yes. There is no bar under the law against an elector proposing the nomination of more than one candidate. Thus, an elector subscribing as proposer for the nomination of one candidate may so subscribe the nominations of one or more other candidates also (Amolak Chand Vs Raghuveer Singh AIR 1968 SC 1203). Even a candidate himself may propose the nomination of another candidate for the same election.
+<END>
+User: Who can present the nomination paper of a candidate?
+Assistant: A nomination paper shall be presented to the returning officer or the authorised assistant returning officer either by the candidate himself in person or by any of his proposers [s 33(1) read with Section 39(2), 1951 Act]. It cannot be presented by any other person, even if authorised in writing by the candidate or the proposer.
+<END>
+User: Whether nomination paper can be sent by post or through any other means of communication, like fax or e-mail?
+Assistant: No. Nomination cannot be sent by post or through any other means of communication, like fax or e-mail [see Hari Vishnu Kamath Vs Gopal Swarup Pathak 48 ELR 1]
+<END>
+User: Whether the notice of withdrawal of candidature can be revoked?
+Assistant: No. Once a candidate has given notice of withdrawal of candidature in the prescribed manner, he has no option or discretion thereafter to withdraw or cancel his said notice [s 37(2) read with Section 39(2) of RP Act 1951].
+<END>
+User: How many affidavits, a candidate has to file with his nomination papers?
+Assistant: Two affidavits one in Form 26 and additional affidavit as per the form prescribed by the Commission vide its Order No. 509/11/2004-JS.I dated 03.02.2016, regarding dues against Government accommodation.
+<END>
+User: Whether the nomination paper is valid, if any of the columns of Affidavit (Form-26) is left unfilled?
+Assistant: The Hon’ble Supreme Court in its judgment dated 13/9/2013 in WP(C) No. 121 of 2008 (Resurgence India Vs. Election Commission of India and Ors) has held that in the affidavits filed by candidates along with their nomination paper, the candidates are required to fill up all columns therein and no column can be left blank. Therefore, at the time of filing of affidavit, RO has to check whether all columns of the affidavit filed with the nomination paper are filled up. If not, the RO shall give a notice to the candidate to submit a fresh affidavit with all columns duly filled in. The Hon’ble Court has held that if there is no information to be furnished against any item, appropriate remarks such as ‘NIL’ or ‘Not Applicable’ etc as may be applicable shall be indicated in such column. They should not leave any column blank. If a candidate fails to fill the blanks even after notice from R.O., the nomination paper will be liable to be rejected by the RO at the time of scrutiny of nomination papers.
+<END>
+User: Whether nomination paper of any candidate can be rejected if the information given therein is incorrect?
+Assistant: No, giving wrong information in nomination form is not the criterion for rejection of nomination papers. The Returning Officer can reject the nomination papers as per the provisions contained in Section 36 of the Representation of the People Act, 1951.
+<END>
+User: Then what is the penalty a candidate faces for filing a wrong affidavit?
+Assistant: If a candidate files false declaration or conceals information in affidavit in FORM 26, then he is punishable with imprisonment for a term which may extend to six months, or with fine, or with both under Section 26 of the Representation of the People Act, 1951. In this case as per the Commission’s instruction dated 26.04.2014, the complainant can move before appropriate Court of Law for action under Section 125A of the Representation of the People Act, 1951 directly.
+<END>
+User: What is the outer time limit for filing the various documents required to be filed in connection with nomination paper?
+Assistant: (a) The affidavit in Form 26, the additional affidavit and Forms AA & BB have to be filed latest by 3.00 P.M. on the last date of filing nominations. Revised affidavit may be filed upto the time fixed for scrutiny of nominations, if the candidate has left any column blank in the original affidavit and the Returning Officer has given notice for filing fresh and complete affidavit. (b) Oath has to be taken after filing nomination paper and before the date fixed for scrutiny. (c) Certified extract of electoral roll can be filled up to the time of scrutiny.
+<END>
+User: Whether Form AA and Form BB can be sent by Fax or photocopy of the same can be submitted?
+Assistant: No.
+<END>
+User: Whether Form AA and Form BB can be submitted after 3.00 pm on the last date of filing nominations?
+Assistant: No.
+<END>
+User: How does open ballot system work?
+Assistant: Open ballot voting applies in election to Council of States only. Every political party which has its member(s) as MLAs can appoint an authorized agent to verify as to whom its members have voted. The authorized agent will be seated inside the polling station in seats provided by the R.O. In case of MLAs who are members of political parties, after they mark the vote and before inserting the ballot box, are required to show the marked ballot paper to the authorized agent of their party.
+<END>
+User: Whether an authorized agent of a party at elections to Council of States can be the authorized agent of another party simultaneously?
+Assistant: No. The spirit behind Rule 39AA of the Conduct of Elections Rules 1961 is that MLAs belonging to a political party shall show their ballot papers (after marking their vote) to the authorized agent of that party only and not to the authorized agent of other parties. As such, the same person cannot be appointed as the authorized agent of more than one party.
+<END>
+User: What action is required to be taken by Presiding Officer/Returning Officer in election to Council of States, in case an elector belonging to a political party refuse to/does not show his/her marked ballot paper to the authorized agent of his party or shows his/her marked ballot paper to the authorized agent of other political party?
+Assistant: In such case the ballot paper issued to the elector shall be taken back by the presiding officer or a polling officer under the direction of the presiding officer and the ballot paper and keep it in a separate envelope after recording on the reverse side of the ballot paper “Cancelled-voting procedure violates”.. Provision in sub-rules (6) to (8) of rule 39A of the Conduct of Elections Rules, 1961, shall apply in such case. In case before taking back such ballot paper the elector dropped the ballot paper into ballot box, at the time of counting such ballot paper, RO should first separate this concerned ballot paper and it shall not be counted.
+<END>
+User: Can an independent MLA show his marked ballot paper to the authorized agent of any party?
+Assistant: No, Independent MLAs are required to insert the marked ballot paper in the ballot box without showing the marked ballot to any agent.
+<END>
+User: Whether an MLA or Minister can be appointed as authorized agents of the party at the election to the Council of States and State Legislative Councils by MLAs?
+Assistant: There is no such restriction imposed by the Commission in elections to the Council of States and State Legislative Council by MLAs.
+<END>
+User: Whether the list of electors to be maintained under section 152 of the Representation of the People Act, 1951 can be amended to include the name of newly elected member of state legislative assembly after the date of notification of election to the Council of States or even after the last date of filing of nomination?
+Assistant: In case when a member gets elected to the Legislative Assembly at a bye-election, result of which is declared after the date of notification of election to the Council of States or even after the last date of filing nomination, the name of newly elected MLA should be included in the list of members maintained under Section 152 of the RP Act, 1951. Further, he shall then be entitled to vote at the election to the Council of States if the poll is taken after the date of his election as MLA. This instruction is also applicable in the case of elections to Legislative Council by MLAs.
+<END>
+User: Whether a person can vote at any election if he is confined in a prison, whether under a sentence of imprisonment or as under trial, or is in the lawful custody of the police?
+Assistant: No. The provisions of Section 62(5) of the Representation of the People Act, 1951 provides that no person shall vote at any election if he is confined in a prison, whether under a sentence of imprisonment of transportation or otherwise, or is in the lawful custody of the police.
+<END>
+User: What can be the maximum number of members of Rajya Sabha?
+Assistant: 250 The maximum number of members of Rajya Sabha can be 250. Article 80 of the Constitution of India provides that 12 members are to be nominated by the President of India and not more than 238 representatives from the States to be elected by the elected members of the State Legislative Assemblies in accordance with the system of proportional representation by means of the single transferable vote. (Article 80 of the Constitution).
+<END>
+User: What is the present strength of Rajya Sabha?
+Assistant: 245 Members. 12 are nominated and 233 are elected.
+<END>
+User: What is the life of Rajya Sabha?
+Assistant: Rajya Sabha is a Permanent House and is not subject to dissolution as per Article 83 (1) of the Constitution of India. But as nearly as possible, one third of its members shall retire every 2nd year and an equal number of members are chosen to replace them.
+<END>
+User: Who elects the members of the Rajya Sabha?
+Assistant: Elected members of the State Legislative Assemblies. Here the word ‘State’ includes Puducherry and National Capital Territory of Delhi also. Article 80(4) of Constitution of India provides that members of Rajya Sabha shall be elected by the elected members of State Legislative Assemblies through the system of proportional representation by means of the single transferable vote.
+<END>
+User: Who nominates the members of the Rajya Sabha?
+Assistant: President of India The President of India nominates 12 members of Rajya Sabha as mentioned earlier.
+<END>
+User: Is there any special qualification for nominated members?
+Assistant: Yes Article 80 (3) of the Constitution of India provides that the members to be nominated by the President to Rajya Sabha should have special knowledge or practical experience in matters like literature, science, art and social service. Article 84 (b) stipulates that a person shall be of not less than 30 (Thirty) years of age.
+<END>
+User: How many no. of Proposers are required to subscribe a Nomination in election to Council of States?
+Assistant: In the case of candidates set up by recognized parties, each nomination of a candidate for election to the Council of States or State Legislative Council shall be subscribed by at least ten per cent of the elected members of the Legislative Assembly concerned or ten members, whichever is less, as proposers. In case of other candidates, by ten elected members of the Legislative Assembly.
+<END>
+User: How many sets of nomination paper a candidate can file?
+Assistant: Four Under sub-section (6) of section 33 of the Representation of the People Act, 1951, read with sub-section (2) g Section 39, a maximum of four nomination papers only, can be presented by or on behalf of any candidate or accepted for election in the same Constituency.
+<END>
+User: Who can present the nomination paper to the Returning Officer?
+Assistant: - Nomination paper to be presented either by candidate or by any of his proposers.
+<END>
+User: What is the amount of security deposit for contesting Rajya Sabha election?
+Assistant: Every candidate at an election to the Council of States or a State Legislative Council is required to make a deposit of Rs. 10,000/- (Section 34 read with section 39 (2) of the Representation of the People Act, 1951) as amended by the Representation of the People (Amendment) Act, 2009 (come into force from 1st February, 2010). The amount of deposit shall be Rs. 5,000/- only, if he/she is a member of a Scheduled Castes or Scheduled Tribes.
+<END>
+User: Whether an elected member of the Legislative Assembly/Union Territory is entitled to participate as an elector at an election to the Council of States or State Legislative Council, even before he has assumed his seat in the legislative assembly and has yet to make and subscribe the requisite oath or affirmation as a member of the assembly under the Constitution? Can Such members be proposers for nomination?
+Assistant: Yes. This question arose in Pashupati Nath Sukul Vs Nem Chand Jain (AIR 1984 SC 399). The Supreme Court held that the members of the newly elected legislative assembly became members of that assembly as soon as the assembly was constituted by the Election Commission by its notification under Section 73 of the RP Act 1951, and such members could participate in all non-legislative activities, including the election to the Council of States, even before taking their seats in the assembly. This view was reaffirmed by the Supreme Court by its order of 6 January, 1997 [Madhukar Jetly Vs Union of India and Ors-1997(II)SCC III]. Such member can also act as proposers for nomination of candidates.
+<END>
+User: Whether the provisions of the Tenth Schedule to the Constitution relating to disqualifications on the ground of defection are applicable to open voting at elections to Council of States?
+Assistant: No. The Supreme Court in its judgment dated 22 August 2006 in the matter of Kuldip Nayar Vs Union of India and Ors (AIR 2006 SC3127) observed that ‘The contention contention that the right of expression of the voter at an election for the Council of States is affected by open ballot in not tenable, as an elected MLA would not face any disqualification from the Membership of the House for voting in a particular manner. He may at the most attract action from the political party to which he belongs.’
+<END>
+User: Whether an elected member of a state legislative assembly, whose election has been set aside by the High Court in an election petition, but in whose favour a conditional stay has been granted by the Supreme Court during the pendency of his appeal, permitting the member concerned to sign the assembly’s attendance register but not permitting him to take part in the proceedings of the House, can vote at the elections to the Council of States or the State Legislative Council?
+Assistant: No. The Supreme Court clarified their order of 27 October 1967 (Satyanarayana Mitra Vs Bireswar Ghose Appeal No. 1408 (NCE) of 1967) that the member concerned should not be allowed to participate in the election to the Council of States. Thereafter as a rule, no such member of any State Legislative Assembly has been permitted to either propose the name of any candidate or to vote at any election to the Council of States or State Legislative Council.
+<END>
+User: Whether an elected member of a state legislative assembly, whose election has been set aside by High Court on an election petition, but the Supreme Court grants an absolute stay of the High Court’s order, can vote at the elections to the Council of States or State Legislative Council?
+Assistant: Yes. In such case the order of the High Court shall be deemed never to have taken effect under Section 116B(3) of the RP Act, 1951, and the member concerned shall continue to enjoy all rights and privileges of a member of the legislative assembly without any fetters, including his right to participate in election to the Council of States or State Legislative Council.
+<END>
+User: If a biennial election is not held in due time due to non-existence of the state legislative assembly concerned at the relevant time and the resultant vacancies remain unfilled for a long time during which some other regular vacancies also arise, can the vacancies so arising be combined for a common election or the vacancies arising on each separate occasion (categories) have to be filled by separate elections, even if a common time table for such elections is adopted on the constitution of the assembly concerned?
+Assistant: The regular vacancies that arose from different categories/cycles (determined at the time of initial constitution of the Councils) cannot be combined and vacancies arising on separate occasion have to be filled by separate elections, even if a common time table for such elections is adopted. [Surinder Pal Ratawal Vs Shamim Ahmed AIR 1985 Del 22 & A K Walia Vs Union of India and Ors Civil Writ No. 132 of 1994 before Delhi High Court].
+<END>

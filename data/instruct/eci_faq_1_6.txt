@@ -1,0 +1,30 @@
+User: There are 543 Parliamentary constituencies in India each electing one member. Who demarcates the boundaries of these constituencies?
+Assistant: Delimitation Commission Under Article 82 of the Constitution, the Parliament by law enacts a Delimitation Act after every census. After coming into force commencement of the Act, the Central Government constitutes a Delimitation Commission. This Delimitation Commission demarcates the boundaries of the Parliamentary Constituencies as per provisions of the Delimitation Act. The present delimitation of constituencies has been done on the basis of 2001 census figures under the provisions of Delimitation Act, 2002. Notwithstanding the above, the Constitution of India was specifically amended in 2002 not to have delimitation of constituencies till the first census after 2026. Thus, the present Constituencies carved out on the basis of 2001 census shall continue to be in operation till the first census after 2026..
+<END>
+User: What is the main basis for allocation of seats to various States in the Lok Sabha?
+Assistant: Population of the State Population is the basis of allocation of seats of the Lok Sabha. As far as possible, every State gets representation in the Lok Sabha in proportion to its population as per census figures.
+<END>
+User: Is there any reservation of seats for any special category in Lok Sabha?
+Assistant: Yes In Lok Sabha there is reservation of seats for Scheduled Castes and Scheduled Tribes. Here also census figures are taken into account.
+<END>
+User: On what basis is this reservation made?
+Assistant: Allocation of seats for Scheduled Castes and Tribes in the Lok Sabha are made on the basis of proportion of Scheduled Castes and Tribes in the State concerned to that of the total population, vide provision contained in Article 330 of the Constitution of India read with Section 3 of the R. P. Act, 1950.
+<END>
+User: How many seats are reserved for Scheduled Castes in Lok Sabha?
+Assistant: 84 For Scheduled Castes, 84 seats are reserved in Lok Sabha. The 1st schedule to Representation of People Act, 1950 as amended vide Representation of People (Amendment) Act , 2008 gives the Statewise breakup.
+<END>
+User: How many seats are reserved for Scheduled Tribes in Lok Sabha?
+Assistant: 47 For Scheduled Tribes, 47 seats are reserved in Lok Sabha. The 1st schedule to R. P. Act, 1950 as amended vide Representation of People (Amendment) Act , 2008 gives the Statewise break up.
+<END>
+User: Which are the States having the minimum number of seats in Lok Sabha?
+Assistant: The following States and Union Territories have one seat each in the Lok Sabha Mizoram Nagaland Sikkim Andaman and Nicobar Islands Chandigarh Dadra and Nagar Haveli Daman and Diu Lakshadweep Pondicherry
+<END>
+User: How many States are there in India?
+Assistant: 29 There are 29 states in India viz. Andhra Pradesh, Arunachal Pradesh, Assam, Bihar, Chhattisgarh, Goa, Gujarat, Haryana, Himachal Pradesh, Jammu and Kashmir, Jharkhand, Karnataka, Kerala, Madhya Pradesh, Maharashtra, Manipur, Meghalaya, Mizoram, Nagaland, Orissa, Punjab, Rajasthan, Sikkim, Tamil Nadu, Telangana, Tripura, Uttar Pradesh, Uttaranchal and West Bengal.
+<END>
+User: How many Union Territories are in India?
+Assistant: Seven There are 7 Union Territories in India. Andaman and Nicobar Islands, Chandigarh, Dadra and Nagar Haveli, Daman and Diu, Delhi, Lakshadweep and Pondicherry.
+<END>
+User: For every State, there has to be a Legislative Assembly, but it is not so in the case of all Union Territories. Which are the U.Ts. having a Legislative Assembly?
+Assistant: Two Out of the 7 Union Territories, only Delhi and Pondicherry have Legislative Assemblies.
+<END>

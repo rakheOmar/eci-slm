@@ -1,0 +1,126 @@
+User: Can a non-citizen be a candidate?
+Assistant: No A non citizen cannot be a contesting candidate in the elections. Article 84 (a) of the Constitution of India envisages that a person shall not be qualified to be chosen to fill up a seat in the Parliament unless he is a citizen of India. Similar provision exists for State Legislative Assemblies in Article 173 (a) of the Constitution.
+<END>
+User: What is the minimum age for becoming a candidate for Lok Sabha or Assembly election?
+Assistant: Twenty Five Years Article 84 (b) of Constitution of India provides that the minimum age for becoming a candidate for Lok Sabha election shall be 25 years. Similar provision exists for a candidate to the Legislative Assemblies vide Article 173 (b) of the Constitution read with Sec. 36 (2) of the R. P. Act, 1950.
+<END>
+User: If I am not registered as a voter in any Constituency, can I contest election?
+Assistant: No For contesting an election as a candidate a person must be registered as a voter. Sec 4 (d) of Representation People Act, 1951 precludes a person from contesting unless he is an elector in any parliamentary constituency. Section 5 (c) of R. P. Act, 1951 has a similar provision for Assembly Constituencies.
+<END>
+User: I am registered as a voter in Delhi. Can I contest election to Lok Sabha from Haryana or Maharashtra, or Orissa?
+Assistant: Yes If you are a registered voter in Delhi, you can contest an election to Lok Sabha from any constituency in the country except Assam, Lakshadweep and Sikkim, as per Section 4 (c), 4 (cc) and 4 (ccc) of the R. P. Act, 1951.
+<END>
+User: If some body is convicted for some offence and he is sentenced to imprisonment for 3 years, can he contest elections?
+Assistant: No As per Section 8 (3) of R. P. Act, 1951, if a person is convicted of any offence and sentenced to an imprisonment of 2 years or more, this will be disqualification to contest elections.
+<END>
+User: Supposing he is on bail, pending disposal of his appeal, can he contest the election?
+Assistant: No Even if is a person is on bail, after the conviction and his appeal is pending for disposal, he is disqualified from contesting an election as per the guidelines issued by the Election Commission of India.
+<END>
+User: Can a person confined in jail vote in an election?
+Assistant: No According to section 62(5) of the Representation of the People Act, 1951, no person shall vote at any election if he is confined in a prison, whether under a sentence of imprisonment or transportation or otherwise, or is in the lawful custody of the police.
+<END>
+User: Every candidate is required to make security deposit. How much is the security deposit for Lok Sabha election?
+Assistant: Rupees Twenty five Thousand As per Section 34 1 (a) of R. P. Act, 1951, every candidate is required to make a security deposit of Rs. 25,000/- (Rupees Twenty five Thousand Only) for Lok Sabha elections.
+<END>
+User: Is there any concession for a candidate belonging to Scheduled Caste or Scheduled Tribe?
+Assistant: Yes The same section 34 of R. P. Act, 1951 provides that a candidate belonging to Scheduled Caste and Scheduled Tribe is required to make a security deposit of Rs. 12,500 (Rupees Twelve Thousand five hundred Only).
+<END>
+User: How much is the security deposit for an Assembly election?
+Assistant: Rupees Ten Thousand As per Sec. 34 (1) (b) of the R. P. Act 1951, a general candidate for contesting an Assembly election will have to make a security deposit of Rs. 10,000/-. A candidate belonging to Scheduled Caste / Tribe will have to make a security deposit of Rs. 5,000/- (Five Thousand Only).
+<END>
+User: How much was the security deposit for Lok Sabha election previously?
+Assistant: During the Lok Sabha elections held in 1996 and earlier, the security deposit for general and SC / ST candidate was Rs. 500/- (Rupees Five Hundred Only) and Rs. 250/- (Rupees Two Hundred and Fifty Only) respectively.
+<END>
+User: How much was the security deposit for elections to Assembly election previously?
+Assistant: During Assembly elections held in 1996 and earlier, the security deposit for general and SC / ST candidates was Rs. 250/- (Rupees Two Hundred and Fifty Only) and Rs. 125/- (Rupees One Hundred Twenty Five Only) respectively.
+<END>
+User: When was this change in the amount of security deposit made?
+Assistant: This change in increasing the security deposit was brought about w.e.f 1-2-2010 vide Act 41 of 2009.
+<END>
+User: If you are a candidate of a recognised National or State party, how many proposers you require for your nomination?
+Assistant: Only one If you are a candidate of a recognised national / state party, you would require only one elector of the constituency as proposer, vide Sec. 33 of R. P. Act, 1951.
+<END>
+User: If you are an independent candidate or a candidate of unrecognised political party, how many proposers you require?
+Assistant: Ten The same section 33 of R. P. Act, 1951 provides that as an independent candidate or a candidate of unrecognised political party, ten electors from the constituency should subscribe your nomination paper as proposers.
+<END>
+User: Can a person contest elections to Lok Sabha/Vidhan Sabha from as many constituencies as he likes?
+Assistant: No As per Section 33 (7) of R. P. Act, 1951, a person cannot contest from more than two constituencies for a Lok Sabha/Vidhan Sabha election.
+<END>
+User: Which candidates lose the deposit?
+Assistant: 3354. A defeated candidate who fails to secure more than one sixth of the valid votes polled in the constituency will lose his security deposit.
+<END>
+User: What has been the maximum number of candidates in any constituency in India at any election so far?
+Assistant: In Modakurichi Assembly Constituency of Tamil Nadu there were 1033 contesting candidates during the general election to Tamil Nadu Legislative Assembly in 1996. The ballot papers were in the form of a booklet.
+<END>
+User: The Election Commission has recognised some political parties as National parties and some others as State Parties. How many are National and how many are State parties ?
+Assistant: The Election Commission had recognized 6 Political Parties as National Parties and 36 Political Parties as State Parties in different States at the time of General Elections in 2004.
+<END>
+User: On the day of poll, every voter has to go to a polling station to vote. Normally, how many voters are assigned to a polling station, under the norms of the Election Commission?
+Assistant: As per the instructions of Election Commission as contained in Para 2 of Chapter II of Handbook for Returning Officers, a polling station should be provided for a well defined polling area, normally covering about 800 - 1000 electors. However, in exceptional cases, such number may exceed 1000 to avoid the breakup of any polling area in large villages or urban area. When the number exceeds 1200, auxiliary polling stations should be set up. There is provision for setting up of polling stations in localities inhabited by the weaker section of the society, even though the number may be less than 500. If there is a Leprosy Sanatorium a separate polling station may be set up for the inmates alone. Recently the Commission has issued instructions for Rationalisation of Polling Stations in the country, and the limit of electors has been increased to 1500 per polling station, as Electronic Voting Machines are being used now.
+<END>
+User: Normally, under the Commission’s norms, how far can a polling station be from your house?
+Assistant: Not more than 2 Kms. According to Para 3 of Chapter II of Handbook for Returning Officers, polling stations should be set up in such a manner that ordinarily no voter is required to travel more than two kms to reach his polling station.
+<END>
+User: When you are walking down to your polling station, some candidate or his agent offers you a free lift to the polling station. Can you accept that offer of lift?
+Assistant: No It is a corrupt practice under section 123 (5) of the R. P. Act, 1951. This offence is punishable under Section 133 of the same Act, with imprisonment which may extend upto 3 months and/or with fine.
+<END>
+User: Can you accept such lift when you are going back to your house after you have cast your vote?
+Assistant: No The provision of Corrupt Practice under section 123 (5) as mentioned above will cover conveyance of any elector, to or from any polling station.
+<END>
+User: Somebody offers you some money to vote for a candidate. Can you accept such money?
+Assistant: No Acceptance of money to vote for a candidate is a corrupt practice of bribery under Section 123 (1) of R. P. Act, 1951. It is also an offence under section 171-B of Indian Penal Code and is punishable with imprisonment of either description for a term which may extend to one year or with fine or both.
+<END>
+User: Somebody offers you some money, not to vote for a certain candidate. Can you accept such money?
+Assistant: No The corrupt practice of bribery will also be attracted, if a person accepts money not to vote for a particular candidate.
+<END>
+User: Somebody makes any offer of whisky, liquor or other intoxicant or gives you a dinner to vote for a particular candidate or not to vote for him. Can you accept such offer?
+Assistant: No Acceptance of any offer of liquor or other intoxicants or a dinner to vote for a particular candidate or not to vote for him is bribery.
+<END>
+User: Can any religious or spiritual leader instruct his followers to vote for a particular candidate, otherwise they will become object of Divine displeasure?
+Assistant: No If any person induces or attempts to induce the voter to vote for any particular candidate or otherwise he will become an object of Divine displeasure, he will be guilty of the corrupt practice of exercising undue influence on a voter under sec 123 (2) of R. P. Act, 1951. It is also an offence under section 171C of Indian Penal Code and punishable with imprisonment of either description for a term which may extend to one year or with fine or both.
+<END>
+User: Can any one threaten a voter that he would be excommunicated if he votes for a particular candidate or does not vote for another particular candidate?
+Assistant: No Any threat to a voter that he would be excommunicated if he votes for a particular candidate or does not vote for another particular candidate is a corrupt practice of undue influence under Section 123 (2) of R. P. Act, 1951. It is also punishable under sec 171 F of Indian Penal Code with imprisonment of either description for a term which may extend to one year or with fine or with both.
+<END>
+User: Can anyone tell another person that he should vote for a particular person, or not to vote for him, because the candidate belongs to a particular religion, caste or creed or speaks a particular language?
+Assistant: No Any one telling another person that he should vote for a particular candidate or not to vote for him because he belongs to a particular religion, caste or creed or speaks a particular language is a corrupt practice under section 123 (3) of R. P. Act, 1951.
+<END>
+User: Is a candidate free to spend as much as he likes on his election?
+Assistant: No A candidate is not free to spend as much as he likes on his election. The law prescribes that the total election expenditure shall not exceed the maximum limit prescribed under Rule 90 of the Conduct of Election Rules, 1961. It would also amount to a corrupt practice under sec 123 (6) of R. P. Act, 1951.
+<END>
+User: What is the limit for election expenditure in a parliamentary constituency in bigger States, like, UP, Bihar, Andhra Pradesh, M.P?
+Assistant: The limit for election expenditure is revised from time to time. At present the limit of expenditure for a parliamentary constituency in bigger states like U. P, Bihar, Andhra Pradesh, Madhya Pradesh is Rs. 40 lakhs.
+<END>
+User: What is the limit of such expenditure for an assembly constituency in these bigger States?
+Assistant: The limit of election expenditure for an assembly constituency in the above bigger states is Rs. 16 lakhs.
+<END>
+User: What was the limit for the Parliamentary and Assembly constituencies in the above States at the time of the last general election in 2009?
+Assistant: The limit of election expenses in the above bigger states at the time of 2009 general election was Rs. 25 lakhs for a Parliamentary constituency and Rs. 10 lakhs for an assembly constituency.
+<END>
+User: Are these limits uniform for all States? If not ,What is the lowest limit for a parliamentary constituency at present?
+Assistant: No The maximum limits of election expenditure vary from State to State. The lowest limit at present for a parliamentary constituency is Rs. 16 lakhs for the constituency of Dadra and Nagar Haveli, Daman and Diu and Lakshadweep. The lowest limit for assembly constituency is Rs. 8 lakh in Goa, Manipur, Meghalaya, Mizoram, Nagaland, Sikkim, Tripura and Puducherry
+<END>
+User: Are the candidates required to file any account of election expenses?
+Assistant: Under section 77 of the R.P.Act, 1951, every candidate at an election to the House of the People or State Legislative Assembly is required to keep, either by himself or by his election agent, a separate and correct account of all expenditure in connection with the selection incurred or authorised by him or his election agent between the date on which he has been nominated and the date of declaration of result, both dates inclusive. Every contesting candidate has to lodge a true copy of the said account within 30 days of result of the election.
+<END>
+User: Who is the authority to whom such account is to be lodged?
+Assistant: In every state the account of election expenses shall be lodged by a contesting candidate with the District Election Officer of the district in which the constituency from which he contested lies. In the case of Union Territories, such accounts are to be lodged with the Returning Officer Concerned.
+<END>
+User: If a Candidate is contesting from more than one constituency, is he required to file separate accounts or only one consolidated account?
+Assistant: If a candidate is contesting from more than one constituency, he has to lodge a separate return of election expenses for every election which he has contested. The election for each constituency is a separate election.
+<END>
+User: What is the penalty if a candidate does not file his account of election expenses?
+Assistant: Under section 10A of the RP Act, 1951, if the Election Commission is satisfied that a person has failed to lodge an account of election expenses with the time and in the manner required by or under that Act and he has no good reason or justification for the failure, it has the power to disqualify him for a period of 3 years for being chosen as, and for being, a member of either House of Parliament or the Legislative Assembly or Legislative Council of a State.
+<END>
+User: What is the deadline after which no public meetings and processions can be taken out?
+Assistant: As per Sec. 126 of R. P. Act, 1951, no public meetings and processions can be taken out during the period of 48 hours ending with the hour fixed for the conclusion of poll.
+<END>
+User: On the day of poll, can any one vote in the name of another person, even with his consent?
+Assistant: No On the day of poll no one can vote in the name of another even with his consent. If he does so it would amount to impersonation which is an offence under Section 171 D of Indian Penal Code. The offence is punishable with imprisonment of either description which may extend to one year or with fine or both.
+<END>
+User: Can any one vote more than once, even if his name is included (wrongly) at more than one place?
+Assistant: No No one can vote more than once even if his name is included at more than one place. If he does so he will be guilty of impersonation which will be punishable as above.
+<END>
+User: If you go to your polling station and find that some body else has impersonated for you and already voted in your name, can you vote in such circumstance?
+Assistant: Yes If a person finds that someone else has already voted in his name, then also he will be allowed to vote. But his ballot paper will be marked as a Tendered Ballot Paper by the Presiding Officer. This will be kept separately in the prescribed cover, as per Rule 42 of the Conduct of Elections Rules, 1961.
+<END>
