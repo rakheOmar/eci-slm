@@ -5,7 +5,13 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DATA_DIRS = [ROOT / "pretrain", ROOT / "instruct", ROOT / "pretrain_expanded", ROOT / "pretrain_augmented"]
+DATA_DIRS = [
+    ROOT / "pretrain",
+    ROOT / "instruct",
+    ROOT / "pretrain_expanded",
+    ROOT / "pretrain_augmented",
+    ROOT / "english_pretrain",
+]
 
 
 def get_tokenizer():
