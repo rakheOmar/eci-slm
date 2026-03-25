@@ -94,6 +94,8 @@ def profile_defaults(name: str) -> dict[str, int | float]:
         "max_grad_norm": 0.5,
     }
     if name == "t4_2gpu":
+        # ~154M params with vocab_size=32k.
+        common["n_layer"] = 17
         # Global batch size across both GPUs (per-replica batch=1).
         common["batch_size"] = 2
         common["grad_accum_steps"] = 8
