@@ -96,9 +96,9 @@ def profile_defaults(name: str) -> dict[str, int | float]:
     if name == "t4_2gpu":
         # ~154M params with vocab_size=32k.
         common["n_layer"] = 17
-        # Global batch size across both GPUs (per-replica batch=1).
-        common["batch_size"] = 2
-        common["grad_accum_steps"] = 8
+        # Higher per-step work for better dual-T4 utilization.
+        common["batch_size"] = 8
+        common["grad_accum_steps"] = 2
     else:
         common["batch_size"] = 1
         common["grad_accum_steps"] = 8
@@ -280,24 +280,26 @@ def _distributed_micro_step_tf(
     def step_fn(inputs):
         x, y = inputs
         with tf.GradientTape() as tape:
-            _, loss = model.call(x, training=True, targets=y)
-            if loss is None:
+            _, loss_unscaled = model.call(x, training=True, targets=y)
+            if loss_unscaled is None:
                 raise RuntimeError("Model returned no loss during distributed training")
-            loss = loss / grad_divisor
-        grads = tape.gradient(loss, variables)
+            loss_scaled = loss_unscaled / grad_divisor
+        grads = tape.gradient(loss_scaled, variables)
         safe_grads = []
         for g, v in zip(grads, variables):
             safe_grads.append(tf.zeros_like(v) if g is None else g)
-        return loss, tuple(safe_grads)
+        return loss_unscaled, tuple(safe_grads)
 
     per_replica_loss, per_replica_grads = strategy.run(step_fn, args=(next(iterator),))
-    loss = strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
+    loss_unscaled = strategy.reduce(
+        tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None
+    )
 
     grads: list[tf.Tensor] = []
     for g in per_replica_grads:
         reduced = strategy.reduce(tf.distribute.ReduceOp.MEAN, g, axis=None)
         grads.append(tf.convert_to_tensor(reduced))
-    return loss, grads
+    return loss_unscaled, grads
 
 
 @tf.function
