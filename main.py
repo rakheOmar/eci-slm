@@ -212,29 +212,12 @@ def distributed_micro_step(
     iterator,
     grad_divisor: int,
 ):
-    variables = model.trainable_variables
-
-    def step_fn(inputs):
-        x, y = inputs
-        with tf.GradientTape() as tape:
-            _, loss = model.call(x, training=True, targets=y)
-            if loss is None:
-                raise RuntimeError("Model returned no loss during distributed training")
-            loss = loss / grad_divisor
-        grads = tape.gradient(loss, variables)
-        safe_grads = []
-        for g, v in zip(grads, variables):
-            safe_grads.append(tf.zeros_like(v) if g is None else g)
-        return loss, tuple(safe_grads)
-
-    per_replica_loss, per_replica_grads = strategy.run(step_fn, args=(next(iterator),))
-    loss = strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
-
-    grads: list[tf.Tensor] = []
-    for g in per_replica_grads:
-        reduced = strategy.reduce(tf.distribute.ReduceOp.MEAN, g, axis=None)
-        grads.append(tf.convert_to_tensor(reduced))
-    return loss, grads
+    return _distributed_micro_step_tf(
+        strategy=strategy,
+        model=model,
+        iterator=iterator,
+        grad_divisor=grad_divisor,
+    )
 
 
 def train_one_step_distributed(
@@ -273,6 +256,54 @@ def evaluate_distributed(
 ) -> float:
     losses: list[float] = []
 
+    for _ in range(num_batches):
+        loss = _distributed_eval_step_tf(
+            strategy=strategy,
+            model=model,
+            iterator=val_iter,
+        )
+        losses.append(float(loss.numpy()))
+    return float(np.mean(losses)) if losses else float("nan")
+
+
+@tf.function
+def _distributed_micro_step_tf(
+    strategy: tf.distribute.Strategy,
+    model: ECISLM,
+    iterator,
+    grad_divisor: int,
+):
+    variables = model.trainable_variables
+
+    def step_fn(inputs):
+        x, y = inputs
+        with tf.GradientTape() as tape:
+            _, loss = model.call(x, training=True, targets=y)
+            if loss is None:
+                raise RuntimeError("Model returned no loss during distributed training")
+            loss = loss / grad_divisor
+        grads = tape.gradient(loss, variables)
+        safe_grads = []
+        for g, v in zip(grads, variables):
+            safe_grads.append(tf.zeros_like(v) if g is None else g)
+        return loss, tuple(safe_grads)
+
+    per_replica_loss, per_replica_grads = strategy.run(step_fn, args=(next(iterator),))
+    loss = strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
+
+    grads: list[tf.Tensor] = []
+    for g in per_replica_grads:
+        reduced = strategy.reduce(tf.distribute.ReduceOp.MEAN, g, axis=None)
+        grads.append(tf.convert_to_tensor(reduced))
+    return loss, grads
+
+
+@tf.function
+def _distributed_eval_step_tf(
+    strategy: tf.distribute.Strategy,
+    model: ECISLM,
+    iterator,
+):
     def step_fn(inputs):
         x, y = inputs
         _, loss = model.call(x, training=False, targets=y)
@@ -280,11 +311,8 @@ def evaluate_distributed(
             raise RuntimeError("Model returned no loss during distributed evaluation")
         return loss
 
-    for _ in range(num_batches):
-        per_replica_loss = strategy.run(step_fn, args=(next(val_iter),))
-        loss = strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
-        losses.append(float(loss.numpy()))
-    return float(np.mean(losses)) if losses else float("nan")
+    per_replica_loss = strategy.run(step_fn, args=(next(iterator),))
+    return strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
 
 
 def _iter_eci_and_english_files(data_root: Path) -> tuple[list[Path], list[Path]]:
@@ -524,6 +552,8 @@ def train(args: argparse.Namespace) -> None:
             beta_2=0.95,
             epsilon=1e-8,
         )
+        # Ensure optimizer slot variables are created inside strategy scope.
+        optimizer.build(model.trainable_variables)
 
     ckpt = CheckpointManager(args.checkpoint_dir, max_to_keep=args.keep_last_n)
     global_step = 0
