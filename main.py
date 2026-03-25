@@ -26,6 +26,14 @@ from src.tokenizer import Tokenizer, train_tokenizer
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train ECI-SLM")
 
+    parser.add_argument(
+        "--profile",
+        type=str,
+        default="none",
+        choices=["none", "colab16g"],
+        help="Optional preset that applies a known-good training config.",
+    )
+
     parser.add_argument("--data_dir", type=str, default="artifact")
     parser.add_argument(
         "--tokenizer", type=str, default="artifact/eci_slm_tokenizer.model"
@@ -67,6 +75,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--save_interval", type=int, default=1000)
     parser.add_argument("--keep_last_n", type=int, default=5)
     parser.add_argument("--val_split", type=float, default=0.1)
+    parser.add_argument(
+        "--balance_eci_english",
+        action="store_true",
+        help="When building train/val bins from text files, enforce a 50:50 ECI/English token mix.",
+    )
+    parser.add_argument(
+        "--mix_chunk_tokens",
+        type=int,
+        default=4096,
+        help="Chunk size used to interleave ECI and English tokens in balanced mode.",
+    )
 
     return parser.parse_args()
 
@@ -103,6 +122,41 @@ def validate_config(args: argparse.Namespace) -> None:
         )
     if args.batch_size < 1 or args.grad_accum_steps < 1:
         raise ValueError("batch_size and grad_accum_steps must both be >= 1")
+    if args.mix_chunk_tokens < 1:
+        raise ValueError("mix_chunk_tokens must be >= 1")
+
+
+def apply_profile(args: argparse.Namespace) -> None:
+    if args.profile != "colab16g":
+        return
+
+    # Preset tuned for 16GB Colab GPUs (T4/L4) with this training loop.
+    args.precision = "mixed_fp16"
+    args.n_layer = 20
+    args.n_head = 16
+    args.n_kv_head = 4
+    args.n_embd = 960
+    args.block_size = 512
+    args.dropout = 0.1
+
+    args.batch_size = 2
+    args.grad_accum_steps = 8
+    args.epochs = max(args.epochs, 20)
+
+    args.learning_rate = 2e-4
+    args.weight_decay = 0.1
+    args.warmup_steps = 1000
+    args.min_lr_frac = 0.1
+    args.max_grad_norm = 1.0
+
+    args.log_interval = 20
+    args.eval_interval = 200
+    args.num_val_batches = 20
+    args.save_interval = 500
+
+    args.balance_eci_english = True
+
+    print("Applied profile: colab16g")
 
 
 def resolve_steps_per_epoch(args: argparse.Namespace, train_loader: Dataloader) -> int:
@@ -196,8 +250,53 @@ def _iter_pretrain_text_files(data_root: Path) -> list[Path]:
     return files
 
 
+def _iter_eci_and_english_files(data_root: Path) -> tuple[list[Path], list[Path]]:
+    eci_dirs = [
+        data_root / "pretrain",
+        data_root / "pretrain_expanded",
+        data_root / "pretrain_augmented",
+    ]
+    english_dir = data_root / "english_pretrain"
+
+    eci_files: list[Path] = []
+    for d in eci_dirs:
+        if d.exists():
+            eci_files.extend(sorted(d.glob("*.txt")))
+
+    english_files = sorted(english_dir.glob("*.txt")) if english_dir.exists() else []
+    return eci_files, english_files
+
+
+def _tokenize_files(tokenizer: Tokenizer, paths: list[Path]) -> list[int]:
+    ids: list[int] = []
+    for p in paths:
+        text = p.read_text(encoding="utf-8", errors="replace")
+        ids.extend(tokenizer.encode(text))
+    return ids
+
+
+def _interleave_token_chunks(a: np.ndarray, b: np.ndarray, chunk: int) -> np.ndarray:
+    out: list[np.ndarray] = []
+    i = 0
+    j = 0
+    while i < len(a) or j < len(b):
+        if i < len(a):
+            out.append(a[i : i + chunk])
+            i += chunk
+        if j < len(b):
+            out.append(b[j : j + chunk])
+            j += chunk
+    if not out:
+        return np.asarray([], dtype=np.uint16)
+    return np.concatenate(out)
+
+
 def build_train_val_bins(
-    tokenizer: Tokenizer, out_dir: Path, val_split: float = 0.1
+    tokenizer: Tokenizer,
+    out_dir: Path,
+    val_split: float = 0.1,
+    balance_eci_english: bool = False,
+    mix_chunk_tokens: int = 4096,
 ) -> tuple[Path, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     data_root = Path("data")
@@ -205,11 +304,40 @@ def build_train_val_bins(
     if not txt_files:
         raise FileNotFoundError("No pretraining text files found under data/")
 
-    print(f"Building train/val bins in {out_dir} from {len(txt_files)} text files...")
     all_ids: list[int] = []
-    for p in txt_files:
-        text = p.read_text(encoding="utf-8", errors="replace")
-        all_ids.extend(tokenizer.encode(text))
+    if balance_eci_english:
+        eci_files, english_files = _iter_eci_and_english_files(data_root)
+        if not eci_files or not english_files:
+            raise FileNotFoundError(
+                "Balanced mode requires both ECI files and data/english_pretrain/*.txt files."
+            )
+
+        print(
+            f"Building balanced train/val bins in {out_dir} from "
+            f"{len(eci_files)} ECI files + {len(english_files)} English files..."
+        )
+        eci_ids = np.asarray(_tokenize_files(tokenizer, eci_files), dtype=np.uint16)
+        english_ids = np.asarray(
+            _tokenize_files(tokenizer, english_files), dtype=np.uint16
+        )
+
+        target = min(len(eci_ids), len(english_ids))
+        if target == 0:
+            raise RuntimeError("Balanced mode found zero tokens in one of the corpora.")
+
+        eci_ids = eci_ids[:target]
+        english_ids = english_ids[:target]
+        mixed = _interleave_token_chunks(eci_ids, english_ids, mix_chunk_tokens)
+        all_ids = mixed.tolist()
+        print(
+            "Balanced token mix: "
+            f"ECI={len(eci_ids):,}, English={len(english_ids):,}, Total={len(all_ids):,}"
+        )
+    else:
+        print(
+            f"Building train/val bins in {out_dir} from {len(txt_files)} text files..."
+        )
+        all_ids = _tokenize_files(tokenizer, txt_files)
 
     ids_arr = np.asarray(all_ids, dtype=np.uint16)
     n = len(ids_arr)
@@ -227,6 +355,7 @@ def build_train_val_bins(
 
 
 def train(args: argparse.Namespace) -> None:
+    apply_profile(args)
     set_seed(args.seed)
     set_precision(args.precision)
     validate_config(args)
@@ -280,8 +409,20 @@ def train(args: argparse.Namespace) -> None:
     artifact_train = artifact_dir / "train.bin"
     artifact_val = artifact_dir / "val.bin"
 
-    # Prefer requested data_dir, then artifact/. If still missing, auto-build in artifact/.
-    if train_path.exists() and val_path.exists():
+    # In balanced mode, always (re)build artifact bins to guarantee 50:50 token mix.
+    if args.balance_eci_english:
+        print(
+            "Balanced mode enabled: rebuilding artifact/train.bin and artifact/val.bin"
+        )
+        train_path, val_path = build_train_val_bins(
+            tokenizer=tokenizer,
+            out_dir=artifact_dir,
+            val_split=args.val_split,
+            balance_eci_english=args.balance_eci_english,
+            mix_chunk_tokens=args.mix_chunk_tokens,
+        )
+    # Otherwise prefer requested data_dir, then artifact/. If still missing, auto-build.
+    elif train_path.exists() and val_path.exists():
         pass
     elif artifact_train.exists() and artifact_val.exists():
         print(f"Using existing binary dataset in {artifact_dir}")
@@ -291,6 +432,8 @@ def train(args: argparse.Namespace) -> None:
             tokenizer=tokenizer,
             out_dir=artifact_dir,
             val_split=args.val_split,
+            balance_eci_english=args.balance_eci_english,
+            mix_chunk_tokens=args.mix_chunk_tokens,
         )
 
     train_loader = Dataloader(train_path, args.block_size, args.batch_size)

@@ -108,6 +108,8 @@ class RotaryEmbedding(tf.keras.layers.Layer):
         t = tf.shape(x)[1]
         cos = self.cos[:t][tf.newaxis, :, tf.newaxis, :]  # [1,T,1,D/2]
         sin = self.sin[:t][tf.newaxis, :, tf.newaxis, :]
+        cos = tf.cast(cos, x.dtype)
+        sin = tf.cast(sin, x.dtype)
 
         x1, x2 = tf.split(x, num_or_size_splits=2, axis=-1)
         y1 = x1 * cos + x2 * sin
@@ -175,7 +177,7 @@ class CausalSelfAttention(tf.keras.layers.Layer):
         k = tf.transpose(k, [0, 2, 1, 3])
         v = tf.transpose(v, [0, 2, 1, 3])
 
-        scale = tf.math.rsqrt(tf.cast(self.head_dim, tf.float32))
+        scale = tf.math.rsqrt(tf.cast(self.head_dim, q.dtype))
         scores = tf.matmul(q, k, transpose_b=True) * scale
 
         mask = self.causal_mask[:t, :t][tf.newaxis, tf.newaxis, :, :]
