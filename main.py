@@ -99,6 +99,8 @@ def profile_defaults(name: str) -> dict[str, int | float]:
         # Higher per-step work for better dual-T4 utilization.
         common["batch_size"] = 8
         common["grad_accum_steps"] = 2
+        # Lower peak LR for mixed-precision stability on 2xT4.
+        common["learning_rate"] = 5e-5
     else:
         common["batch_size"] = 1
         common["grad_accum_steps"] = 8
@@ -184,6 +186,16 @@ def train_one_step(
 
     if max_grad_norm > 0:
         accum_grads, _ = tf.clip_by_global_norm(accum_grads, max_grad_norm)
+
+    has_bad = False
+    for g in accum_grads:
+        if tf.math.is_nan(tf.reduce_sum(g)) or tf.math.is_inf(tf.reduce_sum(g)):
+            has_bad = True
+            break
+    if has_bad:
+        print("NaN/Inf in gradients (single-gpu), skipping optimizer step.")
+        return float("nan")
+
     optimizer.apply_gradients(zip(accum_grads, variables))
     return loss_sum / grad_accum_steps
 
@@ -246,6 +258,16 @@ def train_one_step_distributed(
 
     if max_grad_norm > 0:
         accum_grads, _ = tf.clip_by_global_norm(accum_grads, max_grad_norm)
+
+    has_bad = False
+    for g in accum_grads:
+        if tf.math.is_nan(tf.reduce_sum(g)) or tf.math.is_inf(tf.reduce_sum(g)):
+            has_bad = True
+            break
+    if has_bad:
+        print("NaN/Inf in gradients (distributed), skipping optimizer step.")
+        return float("nan")
+
     optimizer.apply_gradients(zip(accum_grads, variables))
     return loss_sum / grad_accum_steps
 
@@ -595,6 +617,20 @@ def train(args: argparse.Namespace) -> None:
                 max_grad_norm=max_grad_norm,
             )
         global_step += 1
+
+        if math.isnan(train_loss) or math.isinf(train_loss):
+            ckpt.save(
+                model,
+                optimizer,
+                global_step,
+                {
+                    "train_loss": train_loss,
+                    "best_val_loss": best_val,
+                    "learning_rate": float(lr),
+                },
+            )
+            print(f"NaN/Inf loss detected at step {global_step}. Saving and stopping.")
+            break
 
         if global_step % args.log_interval == 0:
             elapsed = time.time() - start_time

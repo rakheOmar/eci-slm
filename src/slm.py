@@ -181,9 +181,13 @@ class CausalSelfAttention(tf.keras.layers.Layer):
         scores = tf.matmul(q, k, transpose_b=True) * scale
 
         mask = self.causal_mask[:t, :t][tf.newaxis, tf.newaxis, :, :]
-        scores = tf.where(mask > 0, scores, tf.constant(-1e9, dtype=scores.dtype))
+        # Use an fp16-safe mask value to avoid overflow/cast warnings on mixed precision.
+        mask_val = tf.cast(-1e4, scores.dtype)
+        scores = tf.where(mask > 0, scores, mask_val)
 
-        probs = tf.nn.softmax(scores, axis=-1)
+        # Softmax in fp32 for mixed-precision stability.
+        scores_f32 = tf.cast(scores, tf.float32)
+        probs = tf.cast(tf.nn.softmax(scores_f32, axis=-1), scores.dtype)
         probs = self.attn_dropout(probs, training=training)
 
         y = tf.matmul(probs, v)
@@ -263,7 +267,7 @@ class ECISLM(tf.keras.Model):
 
         loss = tf.reduce_mean(
             tf.keras.losses.sparse_categorical_crossentropy(
-                targets, logits, from_logits=True
+                targets, tf.cast(logits, tf.float32), from_logits=True
             )
         )
         return logits, loss
@@ -285,7 +289,7 @@ class ECISLM(tf.keras.Model):
                 values, _ = tf.math.top_k(logits, k=k)
                 threshold = values[:, -1:]
                 logits = tf.where(
-                    logits < threshold, tf.constant(-1e9, logits.dtype), logits
+                    logits < threshold, tf.constant(-1e4, logits.dtype), logits
                 )
 
             probs = tf.nn.softmax(logits, axis=-1)
