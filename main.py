@@ -967,6 +967,20 @@ def train(
             if improved:
                 best_val = val_loss
                 no_improve_evals = 0
+                ckpt.save(
+                    model,
+                    optimizer,
+                    global_step,
+                    {
+                        "train_loss": train_loss,
+                        "val_loss": val_loss,
+                        "best_val_loss": best_val,
+                        "learning_rate": float(lr),
+                        "lr_scale": float(lr_scale),
+                        "no_improve_evals": int(no_improve_evals),
+                    },
+                    is_best=True,
+                )
             else:
                 no_improve_evals += 1
 

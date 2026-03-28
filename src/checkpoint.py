@@ -94,12 +94,29 @@ class CheckpointManager:
         self.checkpoint_dir = Path(checkpoint_dir)
         self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
         self.max_to_keep = max_to_keep
+        self.best_step_file = self.checkpoint_dir / "best_step.txt"
+
+    def _read_best_step(self) -> int | None:
+        if not self.best_step_file.exists():
+            return None
+        raw = self.best_step_file.read_text(encoding="utf-8").strip()
+        if not raw:
+            return None
+        try:
+            return int(raw)
+        except ValueError:
+            return None
+
+    def _write_best_step(self, step: int) -> None:
+        self.best_step_file.write_text(str(step), encoding="utf-8")
 
     def _prune_old(self) -> None:
         try:
             latest = find_last_step(self.checkpoint_dir)
         except FileNotFoundError:
             return
+
+        best_step = self._read_best_step()
 
         meta_files = sorted(self.checkpoint_dir.glob("meta_*.json"))
         if len(meta_files) <= self.max_to_keep:
@@ -113,6 +130,8 @@ class CheckpointManager:
                 steps.append(int(m.group(1)))
         steps = sorted(set(steps))
         keep_steps = set(steps[-self.max_to_keep :])
+        if best_step is not None:
+            keep_steps.add(best_step)
 
         for step in steps:
             if step in keep_steps:
@@ -132,6 +151,7 @@ class CheckpointManager:
         optimizer: tf.keras.optimizers.Optimizer | None,
         step: int,
         metrics: dict,
+        is_best: bool = False,
     ) -> None:
         save_checkpoint(
             checkpoint_dir=self.checkpoint_dir,
@@ -140,8 +160,11 @@ class CheckpointManager:
             optimizer=optimizer,
             meta_data={"step": step, "metrics": metrics},
         )
+        if is_best:
+            self._write_best_step(step)
         self._prune_old()
-        print(f"Saved checkpoint step={step}")
+        label = " (best)" if is_best else ""
+        print(f"Saved checkpoint step={step}{label}")
 
     def load_latest(
         self,
