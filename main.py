@@ -782,6 +782,7 @@ def train(
                 )
         return reduced
 
+    @tf.function(reduce_retracing=True)
     def _dist_pretrain_microstep(batch):
         def step_fn(x, y):
             with tf.GradientTape() as tape:
@@ -801,6 +802,7 @@ def train(
         grads = _reduce_grads(per_replica_grads)
         return loss, grads
 
+    @tf.function(reduce_retracing=True)
     def _dist_sft_microstep(batch):
         def step_fn(x, y):
             with tf.GradientTape() as tape:
@@ -814,6 +816,24 @@ def train(
         loss = strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
         grads = _reduce_grads(per_replica_grads)
         return loss, grads
+
+    is_sft_stage = args.stage == "sft"
+
+    @tf.function(reduce_retracing=True)
+    def _dist_eval_batch(batch):
+        def step_fn(x, y):
+            logits, _ = model.call(x, training=False, targets=None)
+            if is_sft_stage:
+                return _masked_sft_loss(logits, y)
+            per_tok = tf.keras.losses.sparse_categorical_crossentropy(
+                y,
+                tf.cast(logits, tf.float32),
+                from_logits=True,
+            )
+            return tf.reduce_mean(per_tok)
+
+        per_replica_loss = strategy.run(step_fn, args=batch)
+        return strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
 
     def _distributed_train_step() -> float:
         variables = model.trainable_variables
@@ -853,22 +873,7 @@ def train(
         losses: list[float] = []
         for _ in range(num_batches):
             batch = next(dist_val_iter)
-
-            def step_fn(x, y):
-                logits, _ = model.call(x, training=False, targets=None)
-                if args.stage == "sft":
-                    return _masked_sft_loss(logits, y)
-                per_tok = tf.keras.losses.sparse_categorical_crossentropy(
-                    y,
-                    tf.cast(logits, tf.float32),
-                    from_logits=True,
-                )
-                return tf.reduce_mean(per_tok)
-
-            per_replica_loss = strategy.run(step_fn, args=batch)
-            loss = strategy.reduce(
-                tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None
-            )
+            loss = _dist_eval_batch(batch)
             losses.append(float(loss.numpy()))
 
         return float(np.mean(losses)) if losses else float("nan")
