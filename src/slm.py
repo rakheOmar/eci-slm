@@ -21,20 +21,23 @@ import tensorflow as tf
 
 @dataclass
 class SLMConfig:
-    vocab_size: int = 32000
-    block_size: int = 2048
-    n_layer: int = 12
-    n_head: int = 12
+    vocab_size: int = 8000
+    block_size: int = 256
+    n_layer: int = 6
+    n_head: int = 6
     n_kv_head: int | None = None
-    n_embd: int = 768
+    n_embd: int = 384
     dropout: float = 0.1
     rms_norm_eps: float = 1e-6
     rope_theta: float = 100000.0
+    tie_embeddings: bool = True
 
     def __post_init__(self) -> None:
         if self.n_kv_head is None:
-            self.n_kv_head = int(self.n_head)
+            self.n_kv_head = max(1, int(self.n_head // 3))
         kv_heads = int(self.n_kv_head)
+        if kv_heads < 1:
+            raise ValueError(f"n_kv_head must be >= 1, got {kv_heads}")
         if self.n_embd % self.n_head != 0:
             raise ValueError(
                 f"n_embd ({self.n_embd}) must be divisible by n_head ({self.n_head})"
@@ -99,8 +102,8 @@ class RotaryEmbedding(tf.keras.layers.Layer):
         inv_freq = 1.0 / (self.base ** (idx / tf.cast(half, tf.float32)))
         pos = tf.range(0, self.max_seq_len, dtype=tf.float32)
         freqs = tf.einsum("i,j->ij", pos, inv_freq)  # [T, D/2]
-        self.cos = tf.Variable(tf.cos(freqs), trainable=False, name="rope_cos")
-        self.sin = tf.Variable(tf.sin(freqs), trainable=False, name="rope_sin")
+        self.cos = tf.constant(tf.cos(freqs), dtype=tf.float32)
+        self.sin = tf.constant(tf.sin(freqs), dtype=tf.float32)
         super().build(input_shape)
 
     def call(self, x: tf.Tensor) -> tf.Tensor:
@@ -143,7 +146,7 @@ class CausalSelfAttention(tf.keras.layers.Layer):
         mask = tf.linalg.band_part(
             tf.ones((self.block_size, self.block_size), dtype=tf.float32), -1, 0
         )
-        self.causal_mask = tf.Variable(mask, trainable=False, name="causal_mask")
+        self.causal_mask = tf.constant(mask, dtype=tf.float32)
         super().build(input_shape)
 
     def _expand_kv_for_gqa(self, x: tf.Tensor) -> tf.Tensor:
@@ -242,7 +245,7 @@ class ECISLM(tf.keras.Model):
 
         self.blocks = [Block(cfg) for _ in range(cfg.n_layer)]
         self.final_norm = RMSNorm(cfg.rms_norm_eps)
-        self.lm_head = Linear(cfg.vocab_size)  # untied
+        self.lm_head = None if cfg.tie_embeddings else Linear(cfg.vocab_size)
 
     def call(
         self,
@@ -260,7 +263,13 @@ class ECISLM(tf.keras.Model):
             x = block(x, training=training)
 
         x = self.final_norm(x)
-        logits = self.lm_head(x)
+        if self.config.tie_embeddings:
+            tied_weight = tf.cast(self.token_embed.embeddings, x.dtype)
+            logits = tf.matmul(x, tied_weight, transpose_b=True)
+        else:
+            if self.lm_head is None:
+                raise RuntimeError("lm_head is not initialized for untied embeddings")
+            logits = self.lm_head(x)
 
         if targets is None:
             return logits, None
@@ -279,6 +288,9 @@ class ECISLM(tf.keras.Model):
         temperature: float = 1.0,
         top_k: int | None = None,
     ) -> tf.Tensor:
+        if temperature <= 0:
+            raise ValueError(f"temperature must be > 0, got {temperature}")
+
         for _ in range(max_new_tokens):
             idx_cond = idx[:, -self.config.block_size :]
             logits, _ = self.call(idx_cond, training=False)
@@ -292,8 +304,7 @@ class ECISLM(tf.keras.Model):
                     logits < threshold, tf.constant(-1e4, logits.dtype), logits
                 )
 
-            probs = tf.nn.softmax(logits, axis=-1)
-            next_token = tf.random.categorical(tf.math.log(probs + 1e-9), num_samples=1)
+            next_token = tf.random.categorical(logits, num_samples=1)
             next_token = tf.cast(next_token, dtype=idx.dtype)
             idx = tf.concat([idx, next_token], axis=1)
         return idx
@@ -303,13 +314,18 @@ def create_slm_model(config: SLMConfig | None = None) -> ECISLM:
     return cast(ECISLM, ECISLM(config or SLMConfig()))
 
 
-def count_parameters(model: tf.keras.Model) -> int:
+def count_parameters(model: tf.keras.Model, trainable_only: bool = True) -> int:
+    if trainable_only:
+        return int(
+            sum(tf.size(v).numpy() for v in model.trainable_variables)  # pyright: ignore[reportUnknownMemberType]
+        )
     return int(model.count_params())
 
 
 if __name__ == "__main__":
-    cfg = SLMConfig(vocab_size=32000, block_size=512, n_layer=4, n_head=4, n_embd=256)
+    cfg = SLMConfig()
     model = create_slm_model(cfg)
     _ = model(tf.zeros((1, cfg.block_size), dtype=tf.int32))
     model.summary()
-    print(f"\nTotal parameters: {count_parameters(model):,}")
+    print(f"\nTrainable parameters: {count_parameters(model, trainable_only=True):,}")
+    print(f"All parameters:       {count_parameters(model, trainable_only=False):,}")

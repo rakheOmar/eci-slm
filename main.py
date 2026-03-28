@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""ECI-SLM training entrypoint.
+"""ECI-SLM entrypoint.
 
-Simple, production-focused defaults for:
-- Colab T4 16GB
-- Kaggle 2xT4 (MirroredStrategy)
+Clean pipeline for:
+- tokenizer training
+- pretrain/SFT bin building
+- training with checkpoint + resume
 """
 
 from __future__ import annotations
@@ -13,58 +14,46 @@ import math
 import random
 import time
 from pathlib import Path
-from typing import cast
 
 import numpy as np
 import tensorflow as tf
 
 from src.checkpoint import CheckpointManager, load_checkpoint
 from src.dataloader import Dataloader
-from src.slm import ECISLM, SLMConfig
-from src.tokenizer import Tokenizer, train_tokenizer
+from src.sft import (
+    IGNORE_INDEX,
+    SFTBatchLoader,
+    build_sft_arrays,
+    load_sft_split,
+    save_sft_split,
+    split_sft_arrays,
+)
+from src.slm import ECISLM, SLMConfig, count_parameters
+from src.tokenizer import Tokenizer, TokenizerConfig
+
+
+ROOT = Path(__file__).resolve().parent
+DATA_ROOT = ROOT / "data"
+ARTIFACT_ROOT = ROOT / "artifact"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Train ECI-SLM")
+    parser = argparse.ArgumentParser(description="ECI-SLM pipeline")
 
+    parser.add_argument(
+        "--mode",
+        type=str,
+        default="train",
+        choices=["prepare", "train", "prepare_and_train"],
+        help="prepare: build tokenizer+bins, train: run training, prepare_and_train: both",
+    )
     parser.add_argument(
         "--stage",
         type=str,
         default="pretrain",
         choices=["pretrain", "sft"],
-        help="Training stage: pretrain mixed corpus or SFT on instruct corpus.",
+        help="Data stage to build/train on",
     )
-
-    parser.add_argument(
-        "--profile",
-        type=str,
-        default="t4_1gpu",
-        choices=["t4_1gpu", "t4_2gpu"],
-        help="Hardware preset with stable defaults.",
-    )
-    parser.add_argument("--max_steps", type=int, default=2600)
-    parser.add_argument("--checkpoint_dir", type=str, default="checkpoints")
-    parser.add_argument("--resume", action="store_true")
-
-    parser.add_argument(
-        "--tokenizer", type=str, default="artifact/eci_slm_tokenizer.model"
-    )
-    parser.add_argument("--data_dir", type=str, default="artifact")
-    parser.add_argument("--rebuild_bins", action="store_true")
-    parser.add_argument("--val_split", type=float, default=0.1)
-    parser.add_argument("--mix_chunk_tokens", type=int, default=4096)
-    parser.add_argument(
-        "--english_ratio",
-        type=float,
-        default=0.5,
-        help="Target English token ratio in rebuilt bins (0<ratio<1).",
-    )
-
-    parser.add_argument("--log_interval", type=int, default=20)
-    parser.add_argument("--eval_interval", type=int, default=200)
-    parser.add_argument("--num_val_batches", type=int, default=20)
-    parser.add_argument("--save_interval", type=int, default=100)
-    parser.add_argument("--keep_last_n", type=int, default=6)
 
     parser.add_argument("--seed", type=int, default=1337)
     parser.add_argument(
@@ -75,47 +64,109 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--tokenizer", type=str, default="artifact/eci_slm_tokenizer.model"
+    )
+    parser.add_argument("--vocab_size", type=int, default=8000)
+    parser.add_argument("--model_prefix", type=str, default="eci_slm_tokenizer")
+    parser.add_argument(
+        "--force_train_tokenizer",
+        action="store_true",
+        help="Retrain tokenizer even if tokenizer model already exists",
+    )
+
+    parser.add_argument("--data_dir", type=str, default="artifact")
+    parser.add_argument("--sft_bin_dir", type=str, default="artifact_sft")
+    parser.add_argument("--rebuild_bins", action="store_true")
+    parser.add_argument("--val_split", type=float, default=0.05)
+
+    parser.add_argument(
+        "--english_ratio",
+        type=float,
+        default=0.95,
+        help="English ratio in mixed pretrain bins (ECI ratio is 1-english_ratio)",
+    )
+    parser.add_argument("--mix_chunk_tokens", type=int, default=4096)
+
+    parser.add_argument(
         "--sft_source_dirs",
         type=str,
         default="data/instruct",
-        help="Comma-separated directories of .txt files for SFT stage.",
-    )
-    parser.add_argument(
-        "--sft_bin_dir",
-        type=str,
-        default="artifact_sft",
-        help="Output directory for SFT train/val bins.",
-    )
-    parser.add_argument(
-        "--sft_learning_rate",
-        type=float,
-        default=1e-5,
-        help="Learning rate override for SFT stage.",
-    )
-    parser.add_argument(
-        "--sft_warmup_steps",
-        type=int,
-        default=200,
-        help="Warmup steps override for SFT stage.",
-    )
-    parser.add_argument(
-        "--sft_weight_decay",
-        type=float,
-        default=0.01,
-        help="Weight decay override for SFT stage.",
+        help="Comma-separated directories of .txt files for SFT bins",
     )
 
+    parser.add_argument("--max_steps", type=int, default=20000)
+    parser.add_argument("--batch_size", type=int, default=8)
+    parser.add_argument("--grad_accum_steps", type=int, default=2)
+    parser.add_argument("--learning_rate", type=float, default=2.5e-4)
+    parser.add_argument("--min_lr_frac", type=float, default=0.1)
+    parser.add_argument("--warmup_steps", type=int, default=1000)
+    parser.add_argument("--weight_decay", type=float, default=0.1)
+    parser.add_argument("--max_grad_norm", type=float, default=1.0)
+
+    parser.add_argument("--sft_learning_rate", type=float, default=1e-5)
+    parser.add_argument("--sft_warmup_steps", type=int, default=200)
+    parser.add_argument("--sft_weight_decay", type=float, default=0.01)
+
+    parser.add_argument("--block_size", type=int, default=256)
+    parser.add_argument("--n_layer", type=int, default=6)
+    parser.add_argument("--n_head", type=int, default=6)
+    parser.add_argument("--n_kv_head", type=int, default=2)
+    parser.add_argument("--n_embd", type=int, default=384)
+    parser.add_argument("--dropout", type=float, default=0.1)
+    parser.add_argument("--rope_theta", type=float, default=100000.0)
     parser.add_argument(
-        "--init_checkpoint_dir",
-        type=str,
-        default="",
-        help="Optional directory to initialize model weights from a specific step.",
+        "--untied_head",
+        action="store_true",
+        help="Disable embedding-head tying (increases params)",
+    )
+
+    parser.add_argument("--checkpoint_dir", type=str, default="checkpoints")
+    parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--resume_step", type=int, default=0)
+    parser.add_argument("--init_checkpoint_dir", type=str, default="")
+    parser.add_argument("--init_step", type=int, default=0)
+    parser.add_argument("--keep_last_n", type=int, default=5)
+
+    parser.add_argument("--log_interval", type=int, default=20)
+    parser.add_argument("--eval_interval", type=int, default=200)
+    parser.add_argument("--num_val_batches", type=int, default=20)
+    parser.add_argument("--save_interval", type=int, default=200)
+
+    parser.add_argument(
+        "--warmup_cap_frac",
+        type=float,
+        default=0.1,
+        help="Cap warmup to this fraction of max_steps to avoid LR flatline",
     )
     parser.add_argument(
-        "--init_step",
+        "--min_improve",
+        type=float,
+        default=1e-4,
+        help="Minimum val-loss improvement to reset plateau counters",
+    )
+    parser.add_argument(
+        "--plateau_patience_evals",
         type=int,
-        default=0,
-        help="If >0, load model weights from this checkpoint step before training.",
+        default=4,
+        help="Evals without improvement before reducing LR scale",
+    )
+    parser.add_argument(
+        "--plateau_lr_decay",
+        type=float,
+        default=0.6,
+        help="LR scale multiplier when hitting plateau",
+    )
+    parser.add_argument(
+        "--min_lr_scale",
+        type=float,
+        default=0.2,
+        help="Lower bound for plateau LR scaling",
+    )
+    parser.add_argument(
+        "--early_stop_patience_evals",
+        type=int,
+        default=12,
+        help="Stop if no val improvement for this many evals (0 disables)",
     )
 
     return parser.parse_args()
@@ -128,6 +179,11 @@ def set_seed(seed: int) -> None:
 
 
 def set_precision(policy: str) -> None:
+    if not tf.config.list_physical_devices("GPU") and policy != "fp32":
+        print("No GPU detected, forcing fp32 precision for stability")
+        tf.keras.mixed_precision.set_global_policy("float32")
+        return
+
     if policy == "fp32":
         tf.keras.mixed_precision.set_global_policy("float32")
     elif policy == "mixed_bf16":
@@ -136,43 +192,271 @@ def set_precision(policy: str) -> None:
         tf.keras.mixed_precision.set_global_policy("mixed_float16")
 
 
-def profile_defaults(name: str) -> dict[str, int | float]:
-    # Stable small-ish recipe for T4, with a 2-GPU variant for Kaggle.
-    common: dict[str, int | float] = {
-        "n_layer": 12,
-        "n_head": 12,
-        "n_kv_head": 3,
-        "n_embd": 768,
-        "block_size": 256,
-        "dropout": 0.1,
-        "learning_rate": 8e-5,
-        "warmup_steps": 1200,
-        "weight_decay": 0.1,
-        "min_lr_frac": 0.1,
-        "max_grad_norm": 0.5,
-    }
-    if name == "t4_2gpu":
-        # ~154M params with vocab_size=32k.
-        common["n_layer"] = 17
-        # Higher per-step work for better dual-T4 utilization.
-        common["batch_size"] = 8
-        common["grad_accum_steps"] = 2
-        # Lower peak LR for mixed-precision stability on 2xT4.
-        common["learning_rate"] = 5e-5
-    else:
-        common["batch_size"] = 1
-        common["grad_accum_steps"] = 8
-    return common
+def _combine_text_files(paths: list[Path], output_file: Path) -> None:
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    with output_file.open("w", encoding="utf-8") as out:
+        for i, p in enumerate(paths):
+            out.write(p.read_text(encoding="utf-8", errors="replace"))
+            if i < len(paths) - 1:
+                out.write("\n\n")
 
 
-def validate_model_cfg(n_embd: int, n_head: int, n_kv_head: int) -> None:
-    if n_embd % n_head != 0:
-        raise ValueError("n_embd must be divisible by n_head")
-    if n_kv_head > n_head or n_head % n_kv_head != 0:
-        raise ValueError("n_kv_head must be <= n_head and divide n_head")
-    head_dim = n_embd // n_head
-    if head_dim % 2 != 0:
-        raise ValueError("head_dim must be even for RoPE")
+def _collect_txt_files(dirs: list[Path]) -> list[Path]:
+    files: list[Path] = []
+    for d in dirs:
+        if d.exists():
+            files.extend(sorted(d.glob("*.txt")))
+    return files
+
+
+def _eci_and_english_files() -> tuple[list[Path], list[Path]]:
+    eci_dirs = [
+        DATA_ROOT / "pretrain",
+        DATA_ROOT / "pretrain_expanded",
+        DATA_ROOT / "pretrain_augmented",
+    ]
+    english_dir = DATA_ROOT / "english_pretrain"
+
+    eci_files = _collect_txt_files(eci_dirs)
+    english_files = _collect_txt_files([english_dir])
+    return eci_files, english_files
+
+
+def load_or_train_tokenizer(args: argparse.Namespace) -> Tokenizer:
+    tokenizer_path = Path(args.tokenizer)
+    if tokenizer_path.exists() and not args.force_train_tokenizer:
+        return Tokenizer(tokenizer_path)
+
+    pretrain_dirs = [
+        DATA_ROOT / "pretrain",
+        DATA_ROOT / "pretrain_expanded",
+        DATA_ROOT / "pretrain_augmented",
+        DATA_ROOT / "english_pretrain",
+    ]
+    texts = _collect_txt_files(pretrain_dirs)
+    if not texts:
+        raise FileNotFoundError("No .txt files found to train tokenizer")
+
+    combined = DATA_ROOT / "combined_train.txt"
+    _combine_text_files(texts, combined)
+
+    tokenizer = Tokenizer()
+    tokenizer.train(
+        combined,
+        TokenizerConfig(vocab_size=args.vocab_size, model_prefix=args.model_prefix),
+    )
+    return tokenizer
+
+
+def _tokenize_files(tokenizer: Tokenizer, files: list[Path]) -> np.ndarray:
+    eos = tokenizer.sp.eos_id() if tokenizer.sp is not None else -1
+    chunks: list[np.ndarray] = []
+
+    for p in files:
+        text = p.read_text(encoding="utf-8", errors="replace")
+        ids = tokenizer.encode(text)
+        if eos >= 0:
+            ids.append(eos)
+        chunks.append(np.asarray(ids, dtype=np.uint16))
+
+    if not chunks:
+        return np.asarray([], dtype=np.uint16)
+    return np.concatenate(chunks)
+
+
+def _interleave(
+    eci_ids: np.ndarray,
+    english_ids: np.ndarray,
+    chunk: int,
+    target_eci: int,
+    target_english: int,
+) -> np.ndarray:
+    out: list[np.ndarray] = []
+    i = 0
+    j = 0
+
+    while i < target_eci or j < target_english:
+        if i >= target_eci:
+            pick_english = True
+        elif j >= target_english:
+            pick_english = False
+        else:
+            pick_english = (j / max(1, target_english)) < (i / max(1, target_eci))
+
+        if pick_english:
+            j2 = min(j + chunk, target_english)
+            out.append(english_ids[j:j2])
+            j = j2
+        else:
+            i2 = min(i + chunk, target_eci)
+            out.append(eci_ids[i:i2])
+            i = i2
+
+    if not out:
+        return np.asarray([], dtype=np.uint16)
+    return np.concatenate(out)
+
+
+def save_bins(ids: np.ndarray, out_dir: Path, val_split: float) -> tuple[Path, Path]:
+    if ids.size < 2:
+        raise RuntimeError("Tokenized corpus too small to split train/val")
+    if not (0.0 < val_split < 1.0):
+        raise ValueError("val_split must be in (0, 1)")
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    split_idx = int((1.0 - val_split) * len(ids))
+    split_idx = min(max(split_idx, 1), len(ids) - 1)
+    train_ids = ids[:split_idx]
+    val_ids = ids[split_idx:]
+
+    train_path = out_dir / "train.bin"
+    val_path = out_dir / "val.bin"
+    train_ids.tofile(train_path)
+    val_ids.tofile(val_path)
+
+    print(f"Created {train_path} ({len(train_ids):,} tokens)")
+    print(f"Created {val_path} ({len(val_ids):,} tokens)")
+    return train_path, val_path
+
+
+def build_pretrain_bins(
+    tokenizer: Tokenizer,
+    out_dir: Path,
+    english_ratio: float,
+    val_split: float,
+    mix_chunk_tokens: int,
+) -> tuple[Path, Path]:
+    if not (0.0 < english_ratio < 1.0):
+        raise ValueError("english_ratio must be in (0, 1)")
+    if mix_chunk_tokens < 1:
+        raise ValueError("mix_chunk_tokens must be >= 1")
+
+    eci_files, english_files = _eci_and_english_files()
+    if not eci_files:
+        raise FileNotFoundError("No ECI files found under data/pretrain* directories")
+    if not english_files:
+        raise FileNotFoundError("No English files found under data/english_pretrain")
+
+    print(
+        f"Tokenizing pretrain corpus: {len(eci_files)} ECI files + {len(english_files)} English files"
+    )
+    eci_ids = _tokenize_files(tokenizer, eci_files)
+    eng_ids = _tokenize_files(tokenizer, english_files)
+
+    if eci_ids.size == 0 or eng_ids.size == 0:
+        raise RuntimeError("One side has zero tokens after tokenization")
+
+    eci_ratio = 1.0 - english_ratio
+    max_total = min(eci_ids.size / eci_ratio, eng_ids.size / english_ratio)
+    total_target = int(max_total)
+    target_eci = min(int(total_target * eci_ratio), int(eci_ids.size))
+    target_eng = min(int(total_target * english_ratio), int(eng_ids.size))
+
+    mixed = _interleave(
+        eci_ids=eci_ids,
+        english_ids=eng_ids,
+        chunk=mix_chunk_tokens,
+        target_eci=target_eci,
+        target_english=target_eng,
+    )
+
+    achieved = target_eng / max(1, (target_eci + target_eng))
+    print(
+        f"Mixed tokens: ECI={target_eci:,}, English={target_eng:,}, total={len(mixed):,}, "
+        f"english_ratio={achieved:.3f}"
+    )
+    return save_bins(mixed, out_dir=out_dir, val_split=val_split)
+
+
+def build_sft_bins(
+    tokenizer: Tokenizer,
+    source_dirs: list[Path],
+    out_dir: Path,
+    val_split: float,
+    block_size: int,
+    seed: int,
+) -> tuple[Path, Path]:
+    files = _collect_txt_files(source_dirs)
+    if not files:
+        readable = ", ".join(str(p) for p in source_dirs)
+        raise FileNotFoundError(f"No .txt files found in SFT source dirs: {readable}")
+    print(f"Building masked SFT examples from {len(files)} files")
+
+    x, y = build_sft_arrays(
+        tokenizer=tokenizer,
+        source_files=files,
+        block_size=block_size,
+    )
+    x_train, y_train, x_val, y_val = split_sft_arrays(
+        x=x,
+        y=y,
+        val_split=val_split,
+        seed=seed,
+    )
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    train_path = save_sft_split(out_dir / "train_sft.npz", x_train, y_train)
+    val_path = save_sft_split(out_dir / "val_sft.npz", x_val, y_val)
+
+    print(
+        f"SFT examples: train={len(x_train):,}, val={len(x_val):,}, block_size={x.shape[1]}"
+    )
+    print(f"Created {train_path}")
+    print(f"Created {val_path}")
+    return train_path, val_path
+
+
+def maybe_prepare(args: argparse.Namespace, tokenizer: Tokenizer) -> tuple[Path, Path]:
+    if args.stage == "pretrain":
+        out_dir = Path(args.data_dir)
+        train_path = out_dir / "train.bin"
+        val_path = out_dir / "val.bin"
+        if args.mode in {"prepare", "prepare_and_train"} or args.rebuild_bins:
+            return build_pretrain_bins(
+                tokenizer=tokenizer,
+                out_dir=out_dir,
+                english_ratio=args.english_ratio,
+                val_split=args.val_split,
+                mix_chunk_tokens=args.mix_chunk_tokens,
+            )
+        if train_path.exists() and val_path.exists():
+            return train_path, val_path
+        return build_pretrain_bins(
+            tokenizer=tokenizer,
+            out_dir=out_dir,
+            english_ratio=args.english_ratio,
+            val_split=args.val_split,
+            mix_chunk_tokens=args.mix_chunk_tokens,
+        )
+
+    source_dirs = [
+        Path(p.strip()) for p in args.sft_source_dirs.split(",") if p.strip()
+    ]
+    if not source_dirs:
+        raise ValueError("sft_source_dirs must include at least one directory")
+
+    out_dir = Path(args.sft_bin_dir)
+    train_path = out_dir / "train_sft.npz"
+    val_path = out_dir / "val_sft.npz"
+    if args.mode in {"prepare", "prepare_and_train"} or args.rebuild_bins:
+        return build_sft_bins(
+            tokenizer=tokenizer,
+            source_dirs=source_dirs,
+            out_dir=out_dir,
+            val_split=args.val_split,
+            block_size=args.block_size,
+            seed=args.seed,
+        )
+    if train_path.exists() and val_path.exists():
+        return train_path, val_path
+    return build_sft_bins(
+        tokenizer=tokenizer,
+        source_dirs=source_dirs,
+        out_dir=out_dir,
+        val_split=args.val_split,
+        block_size=args.block_size,
+        seed=args.seed,
+    )
 
 
 def build_lr_scheduler(
@@ -233,13 +517,10 @@ def train_one_step(
             loss_scaled = loss / grad_accum_steps
 
         grads = tape.gradient(loss_scaled, variables)
-        new_accum: list[tf.Tensor] = []
+        next_grads: list[tf.Tensor] = []
         for ag, g in zip(accum_grads, grads):
-            if g is None:
-                new_accum.append(ag)
-            else:
-                new_accum.append(ag + tf.convert_to_tensor(g))
-        accum_grads = new_accum
+            next_grads.append(ag if g is None else ag + tf.convert_to_tensor(g))
+        accum_grads = next_grads
         loss_sum += float(loss.numpy())
 
     if max_grad_norm > 0:
@@ -247,56 +528,37 @@ def train_one_step(
 
     has_bad = False
     for g in accum_grads:
-        if tf.math.is_nan(tf.reduce_sum(g)) or tf.math.is_inf(tf.reduce_sum(g)):
+        s = tf.reduce_sum(g)
+        if tf.math.is_nan(s) or tf.math.is_inf(s):
             has_bad = True
             break
     if has_bad:
-        print("NaN/Inf in gradients (single-gpu), skipping optimizer step.")
+        print("NaN/Inf in gradients, skipping optimizer step")
         return float("nan")
 
     optimizer.apply_gradients(zip(accum_grads, variables))
     return loss_sum / grad_accum_steps
 
 
-def make_distributed_iterator(
-    loader: Dataloader,
-    block_size: int,
-    global_batch_size: int,
-    strategy: tf.distribute.Strategy,
-):
-    def gen():
-        while True:
-            x, y = loader.get_batch()
-            yield x, y
+def _masked_sft_loss(logits: tf.Tensor, labels: tf.Tensor) -> tf.Tensor:
+    mask = tf.not_equal(labels, tf.cast(IGNORE_INDEX, labels.dtype))
+    safe_labels = tf.where(mask, labels, tf.zeros_like(labels))
 
-    sig = (
-        tf.TensorSpec(shape=(global_batch_size, block_size), dtype=tf.int32),
-        tf.TensorSpec(shape=(global_batch_size, block_size), dtype=tf.int32),
+    per_token = tf.keras.losses.sparse_categorical_crossentropy(
+        safe_labels,
+        tf.cast(logits, tf.float32),
+        from_logits=True,
     )
-    ds = tf.data.Dataset.from_generator(gen, output_signature=sig).prefetch(2)
-    dist_ds = strategy.experimental_distribute_dataset(ds)
-    return iter(dist_ds)
+    mask_f = tf.cast(mask, per_token.dtype)
+    denom = tf.reduce_sum(mask_f)
+    denom = tf.maximum(denom, tf.constant(1.0, dtype=denom.dtype))
+    return tf.reduce_sum(per_token * mask_f) / denom
 
 
-def distributed_micro_step(
-    strategy: tf.distribute.Strategy,
-    model: ECISLM,
-    iterator,
-    grad_divisor: int,
-):
-    return _distributed_micro_step_tf(
-        strategy=strategy,
-        model=model,
-        iterator=iterator,
-        grad_divisor=grad_divisor,
-    )
-
-
-def train_one_step_distributed(
-    strategy: tf.distribute.Strategy,
+def train_one_step_sft(
     model: ECISLM,
     optimizer: tf.keras.optimizers.Optimizer,
-    train_iter,
+    train_loader: SFTBatchLoader,
     grad_accum_steps: int,
     max_grad_norm: float,
 ) -> float:
@@ -305,13 +567,20 @@ def train_one_step_distributed(
     loss_sum = 0.0
 
     for _ in range(grad_accum_steps):
-        loss, grads = distributed_micro_step(
-            strategy=strategy,
-            model=model,
-            iterator=train_iter,
-            grad_divisor=grad_accum_steps,
-        )
-        accum_grads = [ag + g for ag, g in zip(accum_grads, grads)]
+        x, y = train_loader.get_batch()
+        x_t = tf.convert_to_tensor(x, dtype=tf.int32)
+        y_t = tf.convert_to_tensor(y, dtype=tf.int32)
+
+        with tf.GradientTape() as tape:
+            logits, _ = model.call(x_t, training=True, targets=None)
+            loss = _masked_sft_loss(logits, y_t)
+            loss_scaled = loss / grad_accum_steps
+
+        grads = tape.gradient(loss_scaled, variables)
+        next_grads: list[tf.Tensor] = []
+        for ag, g in zip(accum_grads, grads):
+            next_grads.append(ag if g is None else ag + tf.convert_to_tensor(g))
+        accum_grads = next_grads
         loss_sum += float(loss.numpy())
 
     if max_grad_norm > 0:
@@ -319,500 +588,198 @@ def train_one_step_distributed(
 
     has_bad = False
     for g in accum_grads:
-        if tf.math.is_nan(tf.reduce_sum(g)) or tf.math.is_inf(tf.reduce_sum(g)):
+        s = tf.reduce_sum(g)
+        if tf.math.is_nan(s) or tf.math.is_inf(s):
             has_bad = True
             break
     if has_bad:
-        print("NaN/Inf in gradients (distributed), skipping optimizer step.")
+        print("NaN/Inf in gradients, skipping optimizer step")
         return float("nan")
 
     optimizer.apply_gradients(zip(accum_grads, variables))
     return loss_sum / grad_accum_steps
 
 
-def evaluate_distributed(
-    strategy: tf.distribute.Strategy,
-    model: ECISLM,
-    val_iter,
-    num_batches: int,
-) -> float:
+def evaluate_sft(model: ECISLM, val_loader: SFTBatchLoader, num_batches: int) -> float:
     losses: list[float] = []
-
     for _ in range(num_batches):
-        loss = _distributed_eval_step_tf(
-            strategy=strategy,
-            model=model,
-            iterator=val_iter,
-        )
+        x, y = val_loader.get_batch()
+        x_t = tf.convert_to_tensor(x, dtype=tf.int32)
+        y_t = tf.convert_to_tensor(y, dtype=tf.int32)
+        logits, _ = model.call(x_t, training=False, targets=None)
+        loss = _masked_sft_loss(logits, y_t)
         losses.append(float(loss.numpy()))
     return float(np.mean(losses)) if losses else float("nan")
 
 
-@tf.function
-def _distributed_micro_step_tf(
-    strategy: tf.distribute.Strategy,
-    model: ECISLM,
-    iterator,
-    grad_divisor: int,
-):
-    variables = model.trainable_variables
-
-    def step_fn(inputs):
-        x, y = inputs
-        with tf.GradientTape() as tape:
-            _, loss_unscaled = model.call(x, training=True, targets=y)
-            if loss_unscaled is None:
-                raise RuntimeError("Model returned no loss during distributed training")
-            loss_scaled = loss_unscaled / grad_divisor
-        grads = tape.gradient(loss_scaled, variables)
-        safe_grads = []
-        for g, v in zip(grads, variables):
-            safe_grads.append(tf.zeros_like(v) if g is None else g)
-        return loss_unscaled, tuple(safe_grads)
-
-    per_replica_loss, per_replica_grads = strategy.run(step_fn, args=(next(iterator),))
-    loss_unscaled = strategy.reduce(
-        tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None
-    )
-
-    grads: list[tf.Tensor] = []
-    for g in per_replica_grads:
-        reduced = strategy.reduce(tf.distribute.ReduceOp.MEAN, g, axis=None)
-        grads.append(tf.convert_to_tensor(reduced))
-    return loss_unscaled, grads
-
-
-@tf.function
-def _distributed_eval_step_tf(
-    strategy: tf.distribute.Strategy,
-    model: ECISLM,
-    iterator,
-):
-    def step_fn(inputs):
-        x, y = inputs
-        _, loss = model.call(x, training=False, targets=y)
-        if loss is None:
-            raise RuntimeError("Model returned no loss during distributed evaluation")
-        return loss
-
-    per_replica_loss = strategy.run(step_fn, args=(next(iterator),))
-    return strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
-
-
-def _iter_eci_and_english_files(data_root: Path) -> tuple[list[Path], list[Path]]:
-    eci_dirs = [
-        data_root / "pretrain",
-        data_root / "pretrain_expanded",
-        data_root / "pretrain_augmented",
-    ]
-    english_dir = data_root / "english_pretrain"
-
-    eci_files: list[Path] = []
-    for d in eci_dirs:
-        if d.exists():
-            eci_files.extend(sorted(d.glob("*.txt")))
-
-    english_files = sorted(english_dir.glob("*.txt")) if english_dir.exists() else []
-    return eci_files, english_files
-
-
-def _tokenize_files(tokenizer: Tokenizer, paths: list[Path]) -> list[int]:
-    ids: list[int] = []
-    for p in paths:
-        text = p.read_text(encoding="utf-8", errors="replace")
-        ids.extend(tokenizer.encode(text))
-    return ids
-
-
-def _interleave_weighted_token_chunks(
-    eci_ids: np.ndarray,
-    english_ids: np.ndarray,
-    chunk: int,
-    target_eci: int,
-    target_english: int,
-) -> np.ndarray:
-    out: list[np.ndarray] = []
-    i = 0
-    j = 0
-
-    while i < target_eci or j < target_english:
-        if i >= target_eci:
-            take_english = True
-        elif j >= target_english:
-            take_english = False
-        else:
-            eci_progress = i / max(1, target_eci)
-            english_progress = j / max(1, target_english)
-            take_english = english_progress < eci_progress
-
-        if take_english:
-            next_j = min(j + chunk, target_english)
-            out.append(english_ids[j:next_j])
-            j = next_j
-        else:
-            next_i = min(i + chunk, target_eci)
-            out.append(eci_ids[i:next_i])
-            i = next_i
-
-    if not out:
-        return np.asarray([], dtype=np.uint16)
-    return np.concatenate(out)
-
-
-def build_balanced_bins(
-    tokenizer: Tokenizer,
-    out_dir: Path,
-    val_split: float,
-    mix_chunk_tokens: int,
-    english_ratio: float,
-) -> tuple[Path, Path]:
-    out_dir.mkdir(parents=True, exist_ok=True)
-    data_root = Path("data")
-    eci_files, english_files = _iter_eci_and_english_files(data_root)
-    if not eci_files or not english_files:
-        raise FileNotFoundError(
-            "Need both ECI files and data/english_pretrain/*.txt for mixed bins."
-        )
-    if not (0.0 < english_ratio < 1.0):
-        raise ValueError("english_ratio must be in (0, 1)")
-    if mix_chunk_tokens < 1:
-        raise ValueError("mix_chunk_tokens must be >= 1")
-
-    print(
-        f"Building balanced bins from {len(eci_files)} ECI files + "
-        f"{len(english_files)} English files..."
-    )
-
-    eci_ids = np.asarray(_tokenize_files(tokenizer, eci_files), dtype=np.uint16)
-    english_ids = np.asarray(_tokenize_files(tokenizer, english_files), dtype=np.uint16)
-
-    available_eci = int(len(eci_ids))
-    available_english = int(len(english_ids))
-    if available_eci == 0 or available_english == 0:
-        raise RuntimeError("One side has zero tokens.")
-
-    eci_ratio = 1.0 - english_ratio
-    max_total = min(available_eci / eci_ratio, available_english / english_ratio)
-    total_target = int(max_total)
-    target_eci = int(total_target * eci_ratio)
-    target_english = int(total_target * english_ratio)
-
-    target_eci = min(target_eci, available_eci)
-    target_english = min(target_english, available_english)
-
-    if target_eci < 1 or target_english < 1:
-        raise RuntimeError(
-            "Not enough tokens to satisfy requested english_ratio; "
-            "add more data or choose a less extreme ratio."
-        )
-
-    eci_ids = eci_ids[:target_eci]
-    english_ids = english_ids[:target_english]
-    all_ids = _interleave_weighted_token_chunks(
-        eci_ids=eci_ids,
-        english_ids=english_ids,
-        chunk=mix_chunk_tokens,
-        target_eci=target_eci,
-        target_english=target_english,
-    )
-
-    n = len(all_ids)
-    split_idx = int(n * (1.0 - val_split))
-    train_ids = all_ids[:split_idx]
-    val_ids = all_ids[split_idx:]
-
-    train_path = out_dir / "train.bin"
-    val_path = out_dir / "val.bin"
-    train_ids.tofile(train_path)
-    val_ids.tofile(val_path)
-
-    achieved_english_ratio = target_english / max(1, (target_eci + target_english))
-    print(
-        "Mixed token build: "
-        f"ECI={target_eci:,}, English={target_english:,}, Total={n:,}, "
-        f"english_ratio={achieved_english_ratio:.3f}"
-    )
-    print(f"Created {train_path} ({len(train_ids):,} tokens)")
-    print(f"Created {val_path} ({len(val_ids):,} tokens)")
-    return train_path, val_path
-
-
-def _collect_txt_files(directories: list[Path]) -> list[Path]:
-    files: list[Path] = []
-    for d in directories:
-        if d.exists():
-            files.extend(sorted(d.glob("*.txt")))
-    return files
-
-
-def build_sft_bins(
-    tokenizer: Tokenizer,
-    source_dirs: list[Path],
-    out_dir: Path,
-    val_split: float,
-) -> tuple[Path, Path]:
-    out_dir.mkdir(parents=True, exist_ok=True)
-    txt_files = _collect_txt_files(source_dirs)
-    if not txt_files:
-        readable = ", ".join(str(p) for p in source_dirs)
-        raise FileNotFoundError(f"No .txt files found in SFT source dirs: {readable}")
-
-    print(f"Building SFT bins from {len(txt_files)} files...")
-    ids = np.asarray(_tokenize_files(tokenizer, txt_files), dtype=np.uint16)
-    if len(ids) < 2:
-        raise RuntimeError("SFT tokenized corpus is too small.")
-
-    n = len(ids)
-    split_idx = int(n * (1.0 - val_split))
-    split_idx = min(max(split_idx, 1), n - 1)
-
-    train_ids = ids[:split_idx]
-    val_ids = ids[split_idx:]
-
-    train_path = out_dir / "train.bin"
-    val_path = out_dir / "val.bin"
-    train_ids.tofile(train_path)
-    val_ids.tofile(val_path)
-
-    print(
-        f"SFT token build: total={n:,}, train={len(train_ids):,}, val={len(val_ids):,}"
-    )
-    print(f"Created {train_path} ({len(train_ids):,} tokens)")
-    print(f"Created {val_path} ({len(val_ids):,} tokens)")
-    return train_path, val_path
-
-
-def load_or_train_tokenizer(tokenizer_path: str) -> Tokenizer:
-    tok = Tokenizer(tokenizer_path)
-    try:
-        _ = tok.vocab_size
-        return tok
-    except (RuntimeError, FileNotFoundError):
-        print(f"Tokenizer not found at: {tokenizer_path}")
-        print("Training tokenizer from data...")
-        train_tokenizer()
-        default_model = Path("artifact/eci_slm_tokenizer.model")
-        return Tokenizer(default_model)
-
-
-def maybe_enable_multi_gpu(profile: str):
-    gpus = tf.config.list_physical_devices("GPU")
-    if profile == "t4_2gpu" and len(gpus) >= 2:
-        strategy = tf.distribute.MirroredStrategy()
-        print(f"Using MirroredStrategy with {strategy.num_replicas_in_sync} GPUs")
-        return strategy
-    if profile == "t4_2gpu":
-        print(
-            "Requested t4_2gpu profile but <2 GPUs found. Falling back to single GPU."
-        )
-    return tf.distribute.get_strategy()
-
-
-def train(args: argparse.Namespace) -> None:
-    set_seed(args.seed)
-    set_precision(args.precision)
-
-    if args.resume and args.init_step > 0:
-        raise ValueError("Use either --resume or --init_step, not both together.")
-
-    cfg_vals = profile_defaults(args.profile)
-    n_layer = int(cfg_vals["n_layer"])
-    n_head = int(cfg_vals["n_head"])
-    n_kv_head = int(cfg_vals["n_kv_head"])
-    n_embd = int(cfg_vals["n_embd"])
-    block_size = int(cfg_vals["block_size"])
-    dropout = float(cfg_vals["dropout"])
-    batch_size = int(cfg_vals["batch_size"])
-    grad_accum_steps = int(cfg_vals["grad_accum_steps"])
-    learning_rate = float(cfg_vals["learning_rate"])
-    warmup_steps = int(cfg_vals["warmup_steps"])
-    weight_decay = float(cfg_vals["weight_decay"])
-    min_lr_frac = float(cfg_vals["min_lr_frac"])
-    max_grad_norm = float(cfg_vals["max_grad_norm"])
-
-    if args.stage == "sft":
-        learning_rate = float(args.sft_learning_rate)
-        warmup_steps = int(args.sft_warmup_steps)
-        weight_decay = float(args.sft_weight_decay)
-
-    validate_model_cfg(n_embd=n_embd, n_head=n_head, n_kv_head=n_kv_head)
+def train(
+    args: argparse.Namespace, train_bin: Path, val_bin: Path, tokenizer: Tokenizer
+) -> None:
     if args.max_steps < 1:
         raise ValueError("max_steps must be >= 1")
 
-    print("=" * 60)
-    print(f"ECI-SLM Training | stage={args.stage} | profile={args.profile}")
-    print("=" * 60)
+    learning_rate = (
+        args.sft_learning_rate if args.stage == "sft" else args.learning_rate
+    )
+    warmup_steps = args.sft_warmup_steps if args.stage == "sft" else args.warmup_steps
+    weight_decay = args.sft_weight_decay if args.stage == "sft" else args.weight_decay
 
-    tokenizer = load_or_train_tokenizer(args.tokenizer)
-    vocab_size = tokenizer.vocab_size
-    print(f"Tokenizer vocab_size: {vocab_size}")
+    if learning_rate <= 0:
+        raise ValueError("learning_rate must be > 0")
+    if args.min_lr_frac <= 0 or args.min_lr_frac > 1:
+        raise ValueError("min_lr_frac must be in (0, 1]")
+    if args.warmup_cap_frac <= 0 or args.warmup_cap_frac > 1:
+        raise ValueError("warmup_cap_frac must be in (0, 1]")
+    if args.plateau_lr_decay <= 0 or args.plateau_lr_decay > 1:
+        raise ValueError("plateau_lr_decay must be in (0, 1]")
+    if args.min_lr_scale <= 0 or args.min_lr_scale > 1:
+        raise ValueError("min_lr_scale must be in (0, 1]")
+    if args.min_improve < 0:
+        raise ValueError("min_improve must be >= 0")
+    if args.grad_accum_steps < 1:
+        raise ValueError("grad_accum_steps must be >= 1")
+    if args.eval_interval < 1 or args.save_interval < 1 or args.log_interval < 1:
+        raise ValueError("log/eval/save intervals must be >= 1")
+
+    warmup_cap = max(1, int(args.max_steps * args.warmup_cap_frac))
+    effective_warmup = min(max(1, warmup_steps), warmup_cap)
+    if effective_warmup != warmup_steps:
+        print(
+            f"Adjusted warmup_steps from {warmup_steps} to {effective_warmup} "
+            f"(cap={args.warmup_cap_frac:.2f} of max_steps)"
+        )
+    warmup_steps = effective_warmup
 
     if args.stage == "sft":
-        sft_bin_dir = Path(args.sft_bin_dir)
-        train_path = sft_bin_dir / "train.bin"
-        val_path = sft_bin_dir / "val.bin"
-        source_dirs = [
-            Path(p.strip()) for p in args.sft_source_dirs.split(",") if p.strip()
-        ]
-        if not source_dirs:
-            raise ValueError("sft_source_dirs must include at least one directory")
-
-        if args.rebuild_bins or not train_path.exists() or not val_path.exists():
-            train_path, val_path = build_sft_bins(
-                tokenizer=tokenizer,
-                source_dirs=source_dirs,
-                out_dir=sft_bin_dir,
-                val_split=args.val_split,
-            )
-        else:
-            print(f"Using existing SFT binary dataset in {sft_bin_dir}")
+        x_train, y_train = load_sft_split(train_bin)
+        x_val, y_val = load_sft_split(val_bin)
+        train_loader = SFTBatchLoader(x_train, y_train, batch_size=args.batch_size)
+        val_loader = SFTBatchLoader(x_val, y_val, batch_size=args.batch_size)
+        train_data_size = int(len(x_train))
+        val_data_size = int(len(x_val))
     else:
-        requested_data_dir = Path(args.data_dir)
-        train_path = requested_data_dir / "train.bin"
-        val_path = requested_data_dir / "val.bin"
+        train_loader = Dataloader(
+            train_bin, block_size=args.block_size, batch_size=args.batch_size
+        )
+        val_loader = Dataloader(
+            val_bin, block_size=args.block_size, batch_size=args.batch_size
+        )
+        train_data_size = int(len(train_loader.data))
+        val_data_size = int(len(val_loader.data))
 
-        artifact_dir = Path("artifact")
-        artifact_train = artifact_dir / "train.bin"
-        artifact_val = artifact_dir / "val.bin"
-
-        if args.rebuild_bins:
-            train_path, val_path = build_balanced_bins(
-                tokenizer=tokenizer,
-                out_dir=artifact_dir,
-                val_split=args.val_split,
-                mix_chunk_tokens=args.mix_chunk_tokens,
-                english_ratio=args.english_ratio,
-            )
-        elif train_path.exists() and val_path.exists():
-            pass
-        elif artifact_train.exists() and artifact_val.exists():
-            print(f"Using existing binary dataset in {artifact_dir}")
-            train_path, val_path = artifact_train, artifact_val
-        else:
-            train_path, val_path = build_balanced_bins(
-                tokenizer=tokenizer,
-                out_dir=artifact_dir,
-                val_split=args.val_split,
-                mix_chunk_tokens=args.mix_chunk_tokens,
-                english_ratio=args.english_ratio,
-            )
-
-    train_loader = Dataloader(train_path, block_size, batch_size)
-    val_loader = (
-        Dataloader(val_path, block_size, batch_size) if val_path.exists() else None
+    cfg = SLMConfig(
+        vocab_size=tokenizer.vocab_size,
+        block_size=args.block_size,
+        n_layer=args.n_layer,
+        n_head=args.n_head,
+        n_kv_head=args.n_kv_head,
+        n_embd=args.n_embd,
+        dropout=args.dropout,
+        rope_theta=args.rope_theta,
+        tie_embeddings=not args.untied_head,
     )
 
-    tokens_per_step = batch_size * block_size * grad_accum_steps
-    steps_per_epoch = max(1, len(train_loader.data) // tokens_per_step)
-    total_steps = args.max_steps
-    lr_at = build_lr_scheduler(
+    model = ECISLM(cfg)
+    _ = model(tf.zeros((1, args.block_size), dtype=tf.int32))
+
+    trainable_params = count_parameters(model, trainable_only=True)
+    print("=" * 70)
+    print(f"Stage: {args.stage}")
+    print(f"Vocab size: {tokenizer.vocab_size}")
+    print(f"Trainable params: {trainable_params:,}")
+    print(
+        f"LR: base={learning_rate:.3e}, min_frac={args.min_lr_frac:.3f}, warmup_steps={warmup_steps}"
+    )
+    if args.stage == "sft":
+        print(f"Train examples: {train_data_size:,} | Val examples: {val_data_size:,}")
+    else:
+        print(f"Train tokens: {train_data_size:,} | Val tokens: {val_data_size:,}")
+    print("=" * 70)
+
+    optimizer = tf.keras.optimizers.AdamW(
         learning_rate=learning_rate,
-        min_lr_frac=min_lr_frac,
-        warmup_steps=warmup_steps,
-        total_steps=total_steps,
+        weight_decay=weight_decay,
+        beta_1=0.9,
+        beta_2=0.95,
+        epsilon=1e-8,
     )
+    optimizer.build(model.trainable_variables)
 
-    print(f"Train tokens: {len(train_loader.data):,}")
-    if val_loader:
-        print(f"Val tokens: {len(val_loader.data):,}")
-    print(f"Steps/epoch: {steps_per_epoch:,} | Total steps: {total_steps:,}")
-
-    strategy = maybe_enable_multi_gpu(args.profile)
-    print(f"Replicas in sync: {strategy.num_replicas_in_sync}")
-
-    train_iter = None
-    val_iter = None
-    if strategy.num_replicas_in_sync > 1:
-        if batch_size % strategy.num_replicas_in_sync != 0:
-            raise ValueError(
-                "Global batch_size must be divisible by number of replicas for multi-GPU."
-            )
-        train_iter = make_distributed_iterator(
-            loader=train_loader,
-            block_size=block_size,
-            global_batch_size=batch_size,
-            strategy=strategy,
+    if args.init_step > 0:
+        init_dir = (
+            Path(args.init_checkpoint_dir)
+            if args.init_checkpoint_dir
+            else Path(args.checkpoint_dir)
         )
-        if val_loader:
-            val_iter = make_distributed_iterator(
-                loader=val_loader,
-                block_size=block_size,
-                global_batch_size=batch_size,
-                strategy=strategy,
-            )
-
-    with strategy.scope():
-        cfg = SLMConfig(
-            vocab_size=vocab_size,
-            block_size=block_size,
-            n_layer=n_layer,
-            n_head=n_head,
-            n_kv_head=n_kv_head,
-            n_embd=n_embd,
-            dropout=dropout,
+        _ = load_checkpoint(
+            checkpoint_dir=init_dir,
+            step=args.init_step,
+            model=model,
+            optimizer=None,
         )
-        model = cast(ECISLM, ECISLM(cfg))
-        _ = model(tf.zeros((1, block_size), dtype=tf.int32))
-        print(f"Model params: {model.count_params():,}")
-
-        optimizer = tf.keras.optimizers.AdamW(
-            learning_rate=learning_rate,
-            weight_decay=weight_decay,
-            beta_1=0.9,
-            beta_2=0.95,
-            epsilon=1e-8,
-        )
-        # Ensure optimizer slot variables are created inside strategy scope.
-        optimizer.build(model.trainable_variables)
-
-        if args.init_step > 0:
-            init_dir = (
-                Path(args.init_checkpoint_dir)
-                if args.init_checkpoint_dir
-                else Path(args.checkpoint_dir)
-            )
-            _ = load_checkpoint(
-                checkpoint_dir=init_dir,
-                step=args.init_step,
-                model=model,
-                optimizer=None,
-            )
-            print(f"Initialized model weights from step {args.init_step} in {init_dir}")
+        print(f"Initialized model from {init_dir} step {args.init_step}")
 
     ckpt = CheckpointManager(args.checkpoint_dir, max_to_keep=args.keep_last_n)
     global_step = 0
     best_val = float("inf")
+    no_improve_evals = 0
+    lr_scale = 1.0
 
-    if args.resume:
+    if args.resume_step > 0:
+        meta = load_checkpoint(
+            checkpoint_dir=args.checkpoint_dir,
+            step=args.resume_step,
+            model=model,
+            optimizer=optimizer,
+        )
+        global_step = int(meta.get("step", args.resume_step))
+        best_val = float(meta.get("metrics", {}).get("best_val_loss", best_val))
+        lr_scale = float(meta.get("metrics", {}).get("lr_scale", lr_scale))
+        no_improve_evals = int(
+            meta.get("metrics", {}).get("no_improve_evals", no_improve_evals)
+        )
+        print(f"Resumed from explicit step {global_step}")
+    elif args.resume:
         loaded = ckpt.load_latest(model, optimizer)
         if loaded:
             global_step = int(loaded.get("step", 0))
             best_val = float(loaded.get("metrics", {}).get("best_val_loss", best_val))
-            print(f"Resumed from step {global_step}")
+            lr_scale = float(loaded.get("metrics", {}).get("lr_scale", lr_scale))
+            no_improve_evals = int(
+                loaded.get("metrics", {}).get("no_improve_evals", no_improve_evals)
+            )
+            print(f"Resumed from latest step {global_step}")
 
-    start_time = time.time()
-    while global_step < total_steps:
-        lr = lr_at(global_step)
+    lr_at = build_lr_scheduler(
+        learning_rate=learning_rate,
+        min_lr_frac=args.min_lr_frac,
+        warmup_steps=warmup_steps,
+        total_steps=args.max_steps,
+    )
+
+    start = time.time()
+    while global_step < args.max_steps:
+        base_lr = lr_at(global_step)
+        lr = max(
+            base_lr * lr_scale, learning_rate * args.min_lr_frac * args.min_lr_scale
+        )
         optimizer.learning_rate = lr
 
-        if strategy.num_replicas_in_sync > 1:
-            if train_iter is None:
-                raise RuntimeError("Distributed train iterator not initialized")
-            train_loss = train_one_step_distributed(
-                strategy=strategy,
+        if args.stage == "sft":
+            train_loss = train_one_step_sft(
                 model=model,
                 optimizer=optimizer,
-                train_iter=train_iter,
-                grad_accum_steps=grad_accum_steps,
-                max_grad_norm=max_grad_norm,
+                train_loader=train_loader,
+                grad_accum_steps=args.grad_accum_steps,
+                max_grad_norm=args.max_grad_norm,
             )
         else:
             train_loss = train_one_step(
                 model=model,
                 optimizer=optimizer,
                 train_loader=train_loader,
-                grad_accum_steps=grad_accum_steps,
-                max_grad_norm=max_grad_norm,
+                grad_accum_steps=args.grad_accum_steps,
+                max_grad_norm=args.max_grad_norm,
             )
         global_step += 1
 
@@ -825,35 +792,73 @@ def train(args: argparse.Namespace) -> None:
                     "train_loss": train_loss,
                     "best_val_loss": best_val,
                     "learning_rate": float(lr),
+                    "lr_scale": float(lr_scale),
+                    "no_improve_evals": int(no_improve_evals),
                 },
             )
-            print(f"NaN/Inf loss detected at step {global_step}. Saving and stopping.")
+            print(f"NaN/Inf loss at step {global_step}; saved checkpoint and stopped")
             break
 
         if global_step % args.log_interval == 0:
-            elapsed = time.time() - start_time
+            elapsed_min = (time.time() - start) / 60.0
             print(
-                f"step {global_step:>7,}/{total_steps:,} | "
+                f"step {global_step:>7,}/{args.max_steps:,} | "
                 f"loss {train_loss:.4f} | lr {float(lr):.3e} | "
-                f"time {elapsed / 60:.1f}m"
+                f"time {elapsed_min:.1f}m"
             )
 
-        if val_loader and global_step % args.eval_interval == 0:
-            if strategy.num_replicas_in_sync > 1:
-                if val_iter is None:
-                    raise RuntimeError("Distributed val iterator not initialized")
-                val_loss = evaluate_distributed(
-                    strategy=strategy,
-                    model=model,
-                    val_iter=val_iter,
-                    num_batches=args.num_val_batches,
-                )
+        if global_step % args.eval_interval == 0:
+            if args.stage == "sft":
+                val_loss = evaluate_sft(model, val_loader, args.num_val_batches)
             else:
                 val_loss = evaluate(model, val_loader, args.num_val_batches)
-            best_val = min(best_val, val_loss)
+
+            improved = val_loss < (best_val - args.min_improve)
+            if improved:
+                best_val = val_loss
+                no_improve_evals = 0
+            else:
+                no_improve_evals += 1
+
+            if (
+                args.plateau_patience_evals > 0
+                and no_improve_evals > 0
+                and no_improve_evals % args.plateau_patience_evals == 0
+            ):
+                new_scale = max(lr_scale * args.plateau_lr_decay, args.min_lr_scale)
+                if new_scale < lr_scale:
+                    print(
+                        f"plateau detected ({no_improve_evals} evals), "
+                        f"reducing lr_scale {lr_scale:.3f} -> {new_scale:.3f}"
+                    )
+                    lr_scale = new_scale
+
             print(
-                f"eval @ {global_step:>7,} | val_loss {val_loss:.4f} | best {best_val:.4f}"
+                f"eval @ {global_step:>7,} | val_loss {val_loss:.4f} | best {best_val:.4f} "
+                f"| no_improve {no_improve_evals} | lr_scale {lr_scale:.3f}"
             )
+
+            if (
+                args.early_stop_patience_evals > 0
+                and no_improve_evals >= args.early_stop_patience_evals
+            ):
+                print(
+                    f"Early stopping: no val improvement for {no_improve_evals} evals"
+                )
+                ckpt.save(
+                    model,
+                    optimizer,
+                    global_step,
+                    {
+                        "train_loss": train_loss,
+                        "best_val_loss": best_val,
+                        "learning_rate": float(lr),
+                        "lr_scale": float(lr_scale),
+                        "no_improve_evals": int(no_improve_evals),
+                        "stopped_early": True,
+                    },
+                )
+                break
 
         if global_step % args.save_interval == 0:
             ckpt.save(
@@ -864,20 +869,35 @@ def train(args: argparse.Namespace) -> None:
                     "train_loss": train_loss,
                     "best_val_loss": best_val,
                     "learning_rate": float(lr),
+                    "lr_scale": float(lr_scale),
+                    "no_improve_evals": int(no_improve_evals),
                 },
             )
 
-    final_metrics = {
-        "best_val_loss": best_val,
-        "total_minutes": (time.time() - start_time) / 60.0,
-    }
-    ckpt.save(model, optimizer, global_step, final_metrics)
-    print("Training complete.")
+    ckpt.save(
+        model,
+        optimizer,
+        global_step,
+        {
+            "best_val_loss": best_val,
+            "total_minutes": (time.time() - start) / 60.0,
+            "lr_scale": float(lr_scale),
+            "no_improve_evals": int(no_improve_evals),
+        },
+    )
+    print("Training complete")
 
 
 def main() -> None:
     args = parse_args()
-    train(args)
+    set_seed(args.seed)
+    set_precision(args.precision)
+
+    tokenizer = load_or_train_tokenizer(args)
+    train_bin, val_bin = maybe_prepare(args, tokenizer)
+
+    if args.mode in {"train", "prepare_and_train"}:
+        train(args, train_bin, val_bin, tokenizer)
 
 
 if __name__ == "__main__":

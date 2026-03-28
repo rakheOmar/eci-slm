@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 @dataclass
 class TokenizerConfig:
-    vocab_size: int = 32000
+    vocab_size: int = 8000
     model_prefix: str = "tokenizer"
     model_type: str = "bpe"
     character_coverage: float = 0.9995
@@ -123,7 +123,7 @@ def train_tokenizer():
     ROOT = Path(__file__).resolve().parent.parent / "data"
 
     config = TokenizerConfig(
-        vocab_size=32000,
+        vocab_size=8000,
         model_prefix="eci_slm_tokenizer",
     )
 
