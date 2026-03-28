@@ -18,7 +18,7 @@ from typing import cast
 import numpy as np
 import tensorflow as tf
 
-from src.checkpoint import CheckpointManager
+from src.checkpoint import CheckpointManager, load_checkpoint
 from src.dataloader import Dataloader
 from src.slm import ECISLM, SLMConfig
 from src.tokenizer import Tokenizer, train_tokenizer
@@ -26,6 +26,14 @@ from src.tokenizer import Tokenizer, train_tokenizer
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train ECI-SLM")
+
+    parser.add_argument(
+        "--stage",
+        type=str,
+        default="pretrain",
+        choices=["pretrain", "sft"],
+        help="Training stage: pretrain mixed corpus or SFT on instruct corpus.",
+    )
 
     parser.add_argument(
         "--profile",
@@ -64,6 +72,50 @@ def parse_args() -> argparse.Namespace:
         type=str,
         default="mixed_fp16",
         choices=["fp32", "mixed_bf16", "mixed_fp16"],
+    )
+
+    parser.add_argument(
+        "--sft_source_dirs",
+        type=str,
+        default="data/instruct",
+        help="Comma-separated directories of .txt files for SFT stage.",
+    )
+    parser.add_argument(
+        "--sft_bin_dir",
+        type=str,
+        default="artifact_sft",
+        help="Output directory for SFT train/val bins.",
+    )
+    parser.add_argument(
+        "--sft_learning_rate",
+        type=float,
+        default=1e-5,
+        help="Learning rate override for SFT stage.",
+    )
+    parser.add_argument(
+        "--sft_warmup_steps",
+        type=int,
+        default=200,
+        help="Warmup steps override for SFT stage.",
+    )
+    parser.add_argument(
+        "--sft_weight_decay",
+        type=float,
+        default=0.01,
+        help="Weight decay override for SFT stage.",
+    )
+
+    parser.add_argument(
+        "--init_checkpoint_dir",
+        type=str,
+        default="",
+        help="Optional directory to initialize model weights from a specific step.",
+    )
+    parser.add_argument(
+        "--init_step",
+        type=int,
+        default=0,
+        help="If >0, load model weights from this checkpoint step before training.",
     )
 
     return parser.parse_args()
@@ -485,6 +537,51 @@ def build_balanced_bins(
     return train_path, val_path
 
 
+def _collect_txt_files(directories: list[Path]) -> list[Path]:
+    files: list[Path] = []
+    for d in directories:
+        if d.exists():
+            files.extend(sorted(d.glob("*.txt")))
+    return files
+
+
+def build_sft_bins(
+    tokenizer: Tokenizer,
+    source_dirs: list[Path],
+    out_dir: Path,
+    val_split: float,
+) -> tuple[Path, Path]:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    txt_files = _collect_txt_files(source_dirs)
+    if not txt_files:
+        readable = ", ".join(str(p) for p in source_dirs)
+        raise FileNotFoundError(f"No .txt files found in SFT source dirs: {readable}")
+
+    print(f"Building SFT bins from {len(txt_files)} files...")
+    ids = np.asarray(_tokenize_files(tokenizer, txt_files), dtype=np.uint16)
+    if len(ids) < 2:
+        raise RuntimeError("SFT tokenized corpus is too small.")
+
+    n = len(ids)
+    split_idx = int(n * (1.0 - val_split))
+    split_idx = min(max(split_idx, 1), n - 1)
+
+    train_ids = ids[:split_idx]
+    val_ids = ids[split_idx:]
+
+    train_path = out_dir / "train.bin"
+    val_path = out_dir / "val.bin"
+    train_ids.tofile(train_path)
+    val_ids.tofile(val_path)
+
+    print(
+        f"SFT token build: total={n:,}, train={len(train_ids):,}, val={len(val_ids):,}"
+    )
+    print(f"Created {train_path} ({len(train_ids):,} tokens)")
+    print(f"Created {val_path} ({len(val_ids):,} tokens)")
+    return train_path, val_path
+
+
 def load_or_train_tokenizer(tokenizer_path: str) -> Tokenizer:
     tok = Tokenizer(tokenizer_path)
     try:
@@ -515,6 +612,9 @@ def train(args: argparse.Namespace) -> None:
     set_seed(args.seed)
     set_precision(args.precision)
 
+    if args.resume and args.init_step > 0:
+        raise ValueError("Use either --resume or --init_step, not both together.")
+
     cfg_vals = profile_defaults(args.profile)
     n_layer = int(cfg_vals["n_layer"])
     n_head = int(cfg_vals["n_head"])
@@ -530,47 +630,72 @@ def train(args: argparse.Namespace) -> None:
     min_lr_frac = float(cfg_vals["min_lr_frac"])
     max_grad_norm = float(cfg_vals["max_grad_norm"])
 
+    if args.stage == "sft":
+        learning_rate = float(args.sft_learning_rate)
+        warmup_steps = int(args.sft_warmup_steps)
+        weight_decay = float(args.sft_weight_decay)
+
     validate_model_cfg(n_embd=n_embd, n_head=n_head, n_kv_head=n_kv_head)
     if args.max_steps < 1:
         raise ValueError("max_steps must be >= 1")
 
     print("=" * 60)
-    print(f"ECI-SLM Training | profile={args.profile}")
+    print(f"ECI-SLM Training | stage={args.stage} | profile={args.profile}")
     print("=" * 60)
 
     tokenizer = load_or_train_tokenizer(args.tokenizer)
     vocab_size = tokenizer.vocab_size
     print(f"Tokenizer vocab_size: {vocab_size}")
 
-    requested_data_dir = Path(args.data_dir)
-    train_path = requested_data_dir / "train.bin"
-    val_path = requested_data_dir / "val.bin"
+    if args.stage == "sft":
+        sft_bin_dir = Path(args.sft_bin_dir)
+        train_path = sft_bin_dir / "train.bin"
+        val_path = sft_bin_dir / "val.bin"
+        source_dirs = [
+            Path(p.strip()) for p in args.sft_source_dirs.split(",") if p.strip()
+        ]
+        if not source_dirs:
+            raise ValueError("sft_source_dirs must include at least one directory")
 
-    artifact_dir = Path("artifact")
-    artifact_train = artifact_dir / "train.bin"
-    artifact_val = artifact_dir / "val.bin"
-
-    if args.rebuild_bins:
-        train_path, val_path = build_balanced_bins(
-            tokenizer=tokenizer,
-            out_dir=artifact_dir,
-            val_split=args.val_split,
-            mix_chunk_tokens=args.mix_chunk_tokens,
-            english_ratio=args.english_ratio,
-        )
-    elif train_path.exists() and val_path.exists():
-        pass
-    elif artifact_train.exists() and artifact_val.exists():
-        print(f"Using existing binary dataset in {artifact_dir}")
-        train_path, val_path = artifact_train, artifact_val
+        if args.rebuild_bins or not train_path.exists() or not val_path.exists():
+            train_path, val_path = build_sft_bins(
+                tokenizer=tokenizer,
+                source_dirs=source_dirs,
+                out_dir=sft_bin_dir,
+                val_split=args.val_split,
+            )
+        else:
+            print(f"Using existing SFT binary dataset in {sft_bin_dir}")
     else:
-        train_path, val_path = build_balanced_bins(
-            tokenizer=tokenizer,
-            out_dir=artifact_dir,
-            val_split=args.val_split,
-            mix_chunk_tokens=args.mix_chunk_tokens,
-            english_ratio=args.english_ratio,
-        )
+        requested_data_dir = Path(args.data_dir)
+        train_path = requested_data_dir / "train.bin"
+        val_path = requested_data_dir / "val.bin"
+
+        artifact_dir = Path("artifact")
+        artifact_train = artifact_dir / "train.bin"
+        artifact_val = artifact_dir / "val.bin"
+
+        if args.rebuild_bins:
+            train_path, val_path = build_balanced_bins(
+                tokenizer=tokenizer,
+                out_dir=artifact_dir,
+                val_split=args.val_split,
+                mix_chunk_tokens=args.mix_chunk_tokens,
+                english_ratio=args.english_ratio,
+            )
+        elif train_path.exists() and val_path.exists():
+            pass
+        elif artifact_train.exists() and artifact_val.exists():
+            print(f"Using existing binary dataset in {artifact_dir}")
+            train_path, val_path = artifact_train, artifact_val
+        else:
+            train_path, val_path = build_balanced_bins(
+                tokenizer=tokenizer,
+                out_dir=artifact_dir,
+                val_split=args.val_split,
+                mix_chunk_tokens=args.mix_chunk_tokens,
+                english_ratio=args.english_ratio,
+            )
 
     train_loader = Dataloader(train_path, block_size, batch_size)
     val_loader = (
@@ -639,6 +764,20 @@ def train(args: argparse.Namespace) -> None:
         )
         # Ensure optimizer slot variables are created inside strategy scope.
         optimizer.build(model.trainable_variables)
+
+        if args.init_step > 0:
+            init_dir = (
+                Path(args.init_checkpoint_dir)
+                if args.init_checkpoint_dir
+                else Path(args.checkpoint_dir)
+            )
+            _ = load_checkpoint(
+                checkpoint_dir=init_dir,
+                step=args.init_step,
+                model=model,
+                optimizer=None,
+            )
+            print(f"Initialized model weights from step {args.init_step} in {init_dir}")
 
     ckpt = CheckpointManager(args.checkpoint_dir, max_to_keep=args.keep_last_n)
     global_step = 0
