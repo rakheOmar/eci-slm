@@ -62,6 +62,13 @@ def parse_args() -> argparse.Namespace:
         default="mixed_fp16",
         choices=["fp32", "mixed_bf16", "mixed_fp16"],
     )
+    parser.add_argument(
+        "--strategy",
+        type=str,
+        default="auto",
+        choices=["auto", "mirrored", "single", "cpu"],
+        help="Distributed strategy selection",
+    )
 
     parser.add_argument(
         "--tokenizer", type=str, default="artifact/eci_slm_tokenizer.model"
@@ -190,6 +197,50 @@ def set_precision(policy: str) -> None:
         tf.keras.mixed_precision.set_global_policy("mixed_bfloat16")
     elif policy == "mixed_fp16":
         tf.keras.mixed_precision.set_global_policy("mixed_float16")
+
+
+def resolve_strategy(mode: str) -> tf.distribute.Strategy:
+    gpus = tf.config.list_physical_devices("GPU")
+    num_gpus = len(gpus)
+
+    if mode == "cpu":
+        return tf.distribute.OneDeviceStrategy(device="/CPU:0")
+
+    if mode == "mirrored":
+        if num_gpus < 2:
+            raise ValueError(f"--strategy mirrored requires >=2 GPUs, found {num_gpus}")
+        return tf.distribute.MirroredStrategy()
+
+    if mode == "single":
+        if num_gpus >= 1:
+            return tf.distribute.OneDeviceStrategy(device="/GPU:0")
+        return tf.distribute.OneDeviceStrategy(device="/CPU:0")
+
+    # auto
+    if num_gpus > 1:
+        return tf.distribute.MirroredStrategy()
+    if num_gpus == 1:
+        return tf.distribute.OneDeviceStrategy(device="/GPU:0")
+    return tf.distribute.get_strategy()
+
+
+def make_batch_dataset(
+    get_batch_fn,
+    batch_size: int,
+    block_size: int,
+) -> tf.data.Dataset:
+    def gen():
+        while True:
+            x, y = get_batch_fn()
+            yield x, y
+
+    return tf.data.Dataset.from_generator(
+        gen,
+        output_signature=(
+            tf.TensorSpec((batch_size, block_size), tf.int32),
+            tf.TensorSpec((batch_size, block_size), tf.int32),
+        ),
+    ).prefetch(tf.data.AUTOTUNE)
 
 
 def _combine_text_files(paths: list[Path], output_file: Path) -> None:
@@ -641,6 +692,13 @@ def train(
     if args.eval_interval < 1 or args.save_interval < 1 or args.log_interval < 1:
         raise ValueError("log/eval/save intervals must be >= 1")
 
+    strategy = resolve_strategy(args.strategy)
+    replicas = int(strategy.num_replicas_in_sync)
+    if args.batch_size % replicas != 0:
+        raise ValueError(
+            f"batch_size ({args.batch_size}) must be divisible by replicas ({replicas})"
+        )
+
     warmup_cap = max(1, int(args.max_steps * args.warmup_cap_frac))
     effective_warmup = min(max(1, warmup_steps), warmup_cap)
     if effective_warmup != warmup_steps:
@@ -655,6 +713,7 @@ def train(
         x_val, y_val = load_sft_split(val_bin)
         train_loader = SFTBatchLoader(x_train, y_train, batch_size=args.batch_size)
         val_loader = SFTBatchLoader(x_val, y_val, batch_size=args.batch_size)
+        block_size = int(x_train.shape[1])
         train_data_size = int(len(x_train))
         val_data_size = int(len(x_val))
     else:
@@ -664,12 +723,13 @@ def train(
         val_loader = Dataloader(
             val_bin, block_size=args.block_size, batch_size=args.batch_size
         )
+        block_size = int(args.block_size)
         train_data_size = int(len(train_loader.data))
         val_data_size = int(len(val_loader.data))
 
     cfg = SLMConfig(
         vocab_size=tokenizer.vocab_size,
-        block_size=args.block_size,
+        block_size=block_size,
         n_layer=args.n_layer,
         n_head=args.n_head,
         n_kv_head=args.n_kv_head,
@@ -679,12 +739,22 @@ def train(
         tie_embeddings=not args.untied_head,
     )
 
-    model = ECISLM(cfg)
-    _ = model(tf.zeros((1, args.block_size), dtype=tf.int32))
+    with strategy.scope():
+        model = ECISLM(cfg)
+        _ = model(tf.zeros((1, block_size), dtype=tf.int32))
+        optimizer = tf.keras.optimizers.AdamW(
+            learning_rate=learning_rate,
+            weight_decay=weight_decay,
+            beta_1=0.9,
+            beta_2=0.95,
+            epsilon=1e-8,
+        )
+        optimizer.build(model.trainable_variables)
 
     trainable_params = count_parameters(model, trainable_only=True)
     print("=" * 70)
     print(f"Stage: {args.stage}")
+    print(f"Strategy: {type(strategy).__name__} | Replicas: {replicas}")
     print(f"Vocab size: {tokenizer.vocab_size}")
     print(f"Trainable params: {trainable_params:,}")
     print(
@@ -696,14 +766,112 @@ def train(
         print(f"Train tokens: {train_data_size:,} | Val tokens: {val_data_size:,}")
     print("=" * 70)
 
-    optimizer = tf.keras.optimizers.AdamW(
-        learning_rate=learning_rate,
-        weight_decay=weight_decay,
-        beta_1=0.9,
-        beta_2=0.95,
-        epsilon=1e-8,
-    )
-    optimizer.build(model.trainable_variables)
+    train_ds = make_batch_dataset(train_loader.get_batch, args.batch_size, block_size)
+    val_ds = make_batch_dataset(val_loader.get_batch, args.batch_size, block_size)
+    dist_train_iter = iter(strategy.experimental_distribute_dataset(train_ds))
+    dist_val_iter = iter(strategy.experimental_distribute_dataset(val_ds))
+
+    def _reduce_grads(per_replica_grads):
+        reduced = []
+        for g in per_replica_grads:
+            if g is None:
+                reduced.append(None)
+            else:
+                reduced.append(
+                    strategy.reduce(tf.distribute.ReduceOp.MEAN, g, axis=None)
+                )
+        return reduced
+
+    def _dist_pretrain_microstep(batch):
+        def step_fn(x, y):
+            with tf.GradientTape() as tape:
+                logits, _ = model.call(x, training=True, targets=None)
+                per_tok = tf.keras.losses.sparse_categorical_crossentropy(
+                    y,
+                    tf.cast(logits, tf.float32),
+                    from_logits=True,
+                )
+                loss = tf.reduce_mean(per_tok)
+                scaled = loss / args.grad_accum_steps
+            grads = tape.gradient(scaled, model.trainable_variables)
+            return loss, grads
+
+        per_replica_loss, per_replica_grads = strategy.run(step_fn, args=batch)
+        loss = strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
+        grads = _reduce_grads(per_replica_grads)
+        return loss, grads
+
+    def _dist_sft_microstep(batch):
+        def step_fn(x, y):
+            with tf.GradientTape() as tape:
+                logits, _ = model.call(x, training=True, targets=None)
+                loss = _masked_sft_loss(logits, y)
+                scaled = loss / args.grad_accum_steps
+            grads = tape.gradient(scaled, model.trainable_variables)
+            return loss, grads
+
+        per_replica_loss, per_replica_grads = strategy.run(step_fn, args=batch)
+        loss = strategy.reduce(tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None)
+        grads = _reduce_grads(per_replica_grads)
+        return loss, grads
+
+    def _distributed_train_step() -> float:
+        variables = model.trainable_variables
+        accum_grads = [tf.zeros_like(v) for v in variables]
+        loss_sum = 0.0
+
+        for _ in range(args.grad_accum_steps):
+            batch = next(dist_train_iter)
+            if args.stage == "sft":
+                loss, grads = _dist_sft_microstep(batch)
+            else:
+                loss, grads = _dist_pretrain_microstep(batch)
+
+            merged: list[tf.Tensor] = []
+            for ag, g in zip(accum_grads, grads):
+                merged.append(ag if g is None else ag + tf.convert_to_tensor(g))
+            accum_grads = merged
+            loss_sum += float(loss.numpy())
+
+        if args.max_grad_norm > 0:
+            accum_grads, _ = tf.clip_by_global_norm(accum_grads, args.max_grad_norm)
+
+        has_bad = False
+        for g in accum_grads:
+            s = tf.reduce_sum(g)
+            if tf.math.is_nan(s) or tf.math.is_inf(s):
+                has_bad = True
+                break
+        if has_bad:
+            print("NaN/Inf in gradients, skipping optimizer step")
+            return float("nan")
+
+        optimizer.apply_gradients(zip(accum_grads, variables))
+        return loss_sum / args.grad_accum_steps
+
+    def _distributed_eval(num_batches: int) -> float:
+        losses: list[float] = []
+        for _ in range(num_batches):
+            batch = next(dist_val_iter)
+
+            def step_fn(x, y):
+                logits, _ = model.call(x, training=False, targets=None)
+                if args.stage == "sft":
+                    return _masked_sft_loss(logits, y)
+                per_tok = tf.keras.losses.sparse_categorical_crossentropy(
+                    y,
+                    tf.cast(logits, tf.float32),
+                    from_logits=True,
+                )
+                return tf.reduce_mean(per_tok)
+
+            per_replica_loss = strategy.run(step_fn, args=batch)
+            loss = strategy.reduce(
+                tf.distribute.ReduceOp.MEAN, per_replica_loss, axis=None
+            )
+            losses.append(float(loss.numpy()))
+
+        return float(np.mean(losses)) if losses else float("nan")
 
     if args.init_step > 0:
         init_dir = (
@@ -765,22 +933,7 @@ def train(
         )
         optimizer.learning_rate = lr
 
-        if args.stage == "sft":
-            train_loss = train_one_step_sft(
-                model=model,
-                optimizer=optimizer,
-                train_loader=train_loader,
-                grad_accum_steps=args.grad_accum_steps,
-                max_grad_norm=args.max_grad_norm,
-            )
-        else:
-            train_loss = train_one_step(
-                model=model,
-                optimizer=optimizer,
-                train_loader=train_loader,
-                grad_accum_steps=args.grad_accum_steps,
-                max_grad_norm=args.max_grad_norm,
-            )
+        train_loss = _distributed_train_step()
         global_step += 1
 
         if math.isnan(train_loss) or math.isinf(train_loss):
@@ -808,10 +961,7 @@ def train(
             )
 
         if global_step % args.eval_interval == 0:
-            if args.stage == "sft":
-                val_loss = evaluate_sft(model, val_loader, args.num_val_batches)
-            else:
-                val_loss = evaluate(model, val_loader, args.num_val_batches)
+            val_loss = _distributed_eval(args.num_val_batches)
 
             improved = val_loss < (best_val - args.min_improve)
             if improved:
