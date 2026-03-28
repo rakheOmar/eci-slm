@@ -45,6 +45,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--rebuild_bins", action="store_true")
     parser.add_argument("--val_split", type=float, default=0.1)
     parser.add_argument("--mix_chunk_tokens", type=int, default=4096)
+    parser.add_argument(
+        "--english_ratio",
+        type=float,
+        default=0.5,
+        help="Target English token ratio in rebuilt bins (0<ratio<1).",
+    )
 
     parser.add_argument("--log_interval", type=int, default=20)
     parser.add_argument("--eval_interval", type=int, default=200)
@@ -366,17 +372,36 @@ def _tokenize_files(tokenizer: Tokenizer, paths: list[Path]) -> list[int]:
     return ids
 
 
-def _interleave_token_chunks(a: np.ndarray, b: np.ndarray, chunk: int) -> np.ndarray:
+def _interleave_weighted_token_chunks(
+    eci_ids: np.ndarray,
+    english_ids: np.ndarray,
+    chunk: int,
+    target_eci: int,
+    target_english: int,
+) -> np.ndarray:
     out: list[np.ndarray] = []
     i = 0
     j = 0
-    while i < len(a) or j < len(b):
-        if i < len(a):
-            out.append(a[i : i + chunk])
-            i += chunk
-        if j < len(b):
-            out.append(b[j : j + chunk])
-            j += chunk
+
+    while i < target_eci or j < target_english:
+        if i >= target_eci:
+            take_english = True
+        elif j >= target_english:
+            take_english = False
+        else:
+            eci_progress = i / max(1, target_eci)
+            english_progress = j / max(1, target_english)
+            take_english = english_progress < eci_progress
+
+        if take_english:
+            next_j = min(j + chunk, target_english)
+            out.append(english_ids[j:next_j])
+            j = next_j
+        else:
+            next_i = min(i + chunk, target_eci)
+            out.append(eci_ids[i:next_i])
+            i = next_i
+
     if not out:
         return np.asarray([], dtype=np.uint16)
     return np.concatenate(out)
@@ -387,14 +412,19 @@ def build_balanced_bins(
     out_dir: Path,
     val_split: float,
     mix_chunk_tokens: int,
+    english_ratio: float,
 ) -> tuple[Path, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     data_root = Path("data")
     eci_files, english_files = _iter_eci_and_english_files(data_root)
     if not eci_files or not english_files:
         raise FileNotFoundError(
-            "Need both ECI files and data/english_pretrain/*.txt for 50:50 bins."
+            "Need both ECI files and data/english_pretrain/*.txt for mixed bins."
         )
+    if not (0.0 < english_ratio < 1.0):
+        raise ValueError("english_ratio must be in (0, 1)")
+    if mix_chunk_tokens < 1:
+        raise ValueError("mix_chunk_tokens must be >= 1")
 
     print(
         f"Building balanced bins from {len(eci_files)} ECI files + "
@@ -404,13 +434,35 @@ def build_balanced_bins(
     eci_ids = np.asarray(_tokenize_files(tokenizer, eci_files), dtype=np.uint16)
     english_ids = np.asarray(_tokenize_files(tokenizer, english_files), dtype=np.uint16)
 
-    target = min(len(eci_ids), len(english_ids))
-    if target == 0:
+    available_eci = int(len(eci_ids))
+    available_english = int(len(english_ids))
+    if available_eci == 0 or available_english == 0:
         raise RuntimeError("One side has zero tokens.")
 
-    eci_ids = eci_ids[:target]
-    english_ids = english_ids[:target]
-    all_ids = _interleave_token_chunks(eci_ids, english_ids, mix_chunk_tokens)
+    eci_ratio = 1.0 - english_ratio
+    max_total = min(available_eci / eci_ratio, available_english / english_ratio)
+    total_target = int(max_total)
+    target_eci = int(total_target * eci_ratio)
+    target_english = int(total_target * english_ratio)
+
+    target_eci = min(target_eci, available_eci)
+    target_english = min(target_english, available_english)
+
+    if target_eci < 1 or target_english < 1:
+        raise RuntimeError(
+            "Not enough tokens to satisfy requested english_ratio; "
+            "add more data or choose a less extreme ratio."
+        )
+
+    eci_ids = eci_ids[:target_eci]
+    english_ids = english_ids[:target_english]
+    all_ids = _interleave_weighted_token_chunks(
+        eci_ids=eci_ids,
+        english_ids=english_ids,
+        chunk=mix_chunk_tokens,
+        target_eci=target_eci,
+        target_english=target_english,
+    )
 
     n = len(all_ids)
     split_idx = int(n * (1.0 - val_split))
@@ -422,7 +474,12 @@ def build_balanced_bins(
     train_ids.tofile(train_path)
     val_ids.tofile(val_path)
 
-    print(f"Balanced token mix: ECI={target:,}, English={target:,}, Total={n:,}")
+    achieved_english_ratio = target_english / max(1, (target_eci + target_english))
+    print(
+        "Mixed token build: "
+        f"ECI={target_eci:,}, English={target_english:,}, Total={n:,}, "
+        f"english_ratio={achieved_english_ratio:.3f}"
+    )
     print(f"Created {train_path} ({len(train_ids):,} tokens)")
     print(f"Created {val_path} ({len(val_ids):,} tokens)")
     return train_path, val_path
@@ -499,6 +556,7 @@ def train(args: argparse.Namespace) -> None:
             out_dir=artifact_dir,
             val_split=args.val_split,
             mix_chunk_tokens=args.mix_chunk_tokens,
+            english_ratio=args.english_ratio,
         )
     elif train_path.exists() and val_path.exists():
         pass
@@ -511,6 +569,7 @@ def train(args: argparse.Namespace) -> None:
             out_dir=artifact_dir,
             val_split=args.val_split,
             mix_chunk_tokens=args.mix_chunk_tokens,
+            english_ratio=args.english_ratio,
         )
 
     train_loader = Dataloader(train_path, block_size, batch_size)
