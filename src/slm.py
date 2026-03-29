@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ECI-SLM model (Nanochat-inspired, TensorFlow).
+"""ECI-SLM model (Nanochat-inspired).
 
 Implemented features:
 - RoPE (no positional embeddings)

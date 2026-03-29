@@ -12,3 +12,4 @@ wheels/
 .opencode/
 artifact/
 checkpoints/
+artifact_sft/
