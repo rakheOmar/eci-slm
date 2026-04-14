@@ -13,3 +13,4 @@ wheels/
 artifact/
 checkpoints/
 artifact_sft/
+model/
